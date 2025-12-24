@@ -6,6 +6,10 @@
 
 using namespace std;
 
+bool isZapezoid = false;
+bool isRogoatuskan = false;
+bool isCrew = false;
+bool isShips = false;
 
 bool check_File_isCSV(const string filename)
 {

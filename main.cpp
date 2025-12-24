@@ -19,11 +19,6 @@
 
 using namespace std;
 
-bool isZapezoid = false;
-bool isRogoatuskan = false;
-bool isCrew = false;
-bool isShips = false;
-
 int main(int argc, char *argv[])
 {
     // XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
