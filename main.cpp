@@ -21,34 +21,32 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    // XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
-
+    // initializing the vectors and variables used
     vector<shipHolder *> zShipTest;
-    vector<shipHolder *> sShipTest;
+    vector<shipHolder *> rShipTest;
     vector<crewHolder *> zCrewTest;
-    vector<crewHolder *> sCrewTest;
+    vector<crewHolder *> rCrewTest;
 
-    string userInput, content;
-    string SHIP_id, SHIP_name, SHIP_type;
-    string CREW_id, CREW_name, CREW_type;
+    string userInput;
 
     cout << "Battleship time! Enter the filenames: " << endl;
+    // Example input: XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
 
     // make sure there are 5 arguments
     if (argc != 5)
     {
-        cout << "PLease follow the format of NameTutorialGroup file1.csv file2.csv file3.csv file4.csv " << endl;
+        cout << "Please follow the format of NameTutorialGroup file1.csv file2.csv file3.csv file4.csv " << endl;
         return 1;
     }
 
-    // go through every string in argv, and check what type of file it is, then assign the objects
+    // go through every string in argv, eg: "zShips1.csv" at arg[1] and check filetype, then create object
     for (int i = 1; i < argc; i++)
     {
         userInput = argv[i];
 
         // check if it is a csv file
         check_File_isCSV(userInput);
-        // check whether it is a Rogoatuskan or a Zapezoids type, and whether it is a crew or ship
+        // check whether it is z or s, and ship or crew, then update bool
         check_Sides(userInput);
 
         ifstream inFile1;
@@ -60,105 +58,39 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        // 1SR, Jager, Name1
-        // 2SR, Kreuzer, Name2
-        // 3SR, Fregatte, Name3
-
-        // possibilities:
-        //  z or s, then in, check if c or s
-
-        // all zaps
+        // ZAPEZOID OBJECT CREATION
         if (isZapezoid)
         {
             if (isShips)
             {
-                // getting one line from the fstream (line from file content)
-                while (getline(inFile1, content, '\n'))
-                {
-                    stringstream stream2(content);
-
-                    // get id, shiptype then name
-                    getline(stream2, SHIP_id, ',');
-                    getline(stream2, SHIP_type, ',');
-                    getline(stream2, SHIP_name);
-
-                    shipHolder *s;
-
-                    if (SHIP_type == "Guerriero")
-                    {
-                        s = new Guerriero(SHIP_id, SHIP_name);
-                    }
-                    else if (SHIP_type == "Medio")
-                    {
-                        s = new Medio(SHIP_id, SHIP_name);
-                    }
-                    else if (SHIP_type == "Corazzata")
-                    {
-                        s = new Corazzata(SHIP_id, SHIP_name);
-                    }
-                    else
-                    {
-                        cout << "Ship type not found! In file name " << userInput << "!" << endl;
-                        return 1;
-                    }
-
-                    zShipTest.push_back(s);
-                }
-
+                Read_zShipFromFile(inFile1, zShipTest);
                 inFile1.close();
             }
-        }
 
-        if (isCrew)
-        {
-            // 3CZ, chipi, torpedo handler
-            // 4CZ, lisa, pilot
-            // 5CZ, gato, gunner
-
-            // getting one line from the fstream (line from file content)
-            while (getline(inFile1, content, '\n'))
+            if (isCrew)
             {
-                stringstream stream2(content);
-                // get id, shiptype then name
-                getline(stream2, CREW_id, ',');
-                getline(stream2, CREW_type, ',');
-                getline(stream2, CREW_name);
-
-                crewHolder *c;
-
-                if (CREW_type == "pilot")
-                {
-                    c = new pilot(CREW_id, CREW_name);
-                }
-                else if (CREW_type == "gunner")
-                {
-                    c = new gunner(CREW_id, CREW_name);
-                }
-                else if (CREW_type == "torpedohandler")
-                {
-                    c = new torpedohandler(CREW_id, CREW_name);
-                }
-                else
-                {
-                    cout << "Crew type not found! In file name " << userInput << "!" << endl;
-                    return 1;
-                }
-
-                zCrewTest.push_back(c);
+               Read_CrewFromFile(inFile1, zCrewTest);
+               inFile1.close();
             }
         }
 
-        inFile1.close();
+        // ROGOATUSKAN OBJECT CREATION
+        if (isRogoatuskan)
+        {
+            if (isShips)
+            {
+                Read_rShipFromFile(inFile1, rShipTest);
+                inFile1.close();
+            }
+
+            if (isCrew)
+            {
+               Read_CrewFromFile(inFile1, rCrewTest);
+               inFile1.close();
+            }
+        }
+
+        // WHERE WE SHOULD DELETE THE OBJECTS
+        return 0;
     }
-
-    if(isRogoatuskan){
-
-        if(isShips){}
-
-        if(isCrew){}
-    }
-
-    //WHERE WE SHOULD DELETE THE OBJECTS
-
-    return 0;
 }
