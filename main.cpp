@@ -24,11 +24,9 @@ bool isRogoatuskan = false;
 bool isCrew = false;
 bool isShips = false;
 
-
 int main(int argc, char *argv[])
 {
     // XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
-    // check if every file has .csv, and therefore valid input
 
     vector<shipHolder *> zShipTest;
     vector<shipHolder *> sShipTest;
@@ -73,18 +71,17 @@ int main(int argc, char *argv[])
 
         // possibilities:
         //  z or s, then in, check if c or s
+
+        // all zaps
         if (isZapezoid)
         {
-            // all zaps
             if (isShips)
             {
-                // where i will be putting the logic
-                // AssignShips();
-
                 // getting one line from the fstream (line from file content)
                 while (getline(inFile1, content, '\n'))
                 {
                     stringstream stream2(content);
+
                     // get id, shiptype then name
                     getline(stream2, SHIP_id, ',');
                     getline(stream2, SHIP_type, ',');
@@ -136,17 +133,14 @@ int main(int argc, char *argv[])
 
                 if (CREW_type == "pilot")
                 {
-
                     c = new pilot(CREW_id, CREW_name);
                 }
                 else if (CREW_type == "gunner")
                 {
-
                     c = new gunner(CREW_id, CREW_name);
                 }
                 else if (CREW_type == "torpedohandler")
                 {
-
                     c = new torpedohandler(CREW_id, CREW_name);
                 }
                 else
