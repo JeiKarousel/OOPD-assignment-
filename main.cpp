@@ -16,6 +16,7 @@
 #include <vector>
 #include "BattleshipClasses.h"
 #include "functions.h"
+#include "script.h"
 
 using namespace std;
 
