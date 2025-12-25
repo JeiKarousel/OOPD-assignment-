@@ -47,20 +47,6 @@ void runScript(int gameCounter, int totalRounds, vector<shipHolder*> &zShipTest,
             cout << winningTeam << "WINS!"<< endl;
         }
 
-
     }
-
-
-    
-
-
-
-
-
-
-
-
-
-
 
 }
