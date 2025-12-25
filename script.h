@@ -8,11 +8,9 @@
 
 using namespace std;
 
-int gameCounter = 1;
 // set to 5 temporarily to run the code
 int totalRounds = 5;
-
-string winningTeam; 
+string winningTeam;
 
 // vector<shipHolder *> zShipTest;
 // vector<shipHolder *> rShipTest;
@@ -20,33 +18,35 @@ string winningTeam;
 // vector<crewHolder *> rCrewTest;
 
 // THE GAME LOOP
-void runScript(int gameCounter, int totalRounds, vector<shipHolder*> &zShipTest, vector<shipHolder*> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
+void runScript(const int &totalRounds, const string &winningTeam, vector<shipHolder *> &zShipTest, vector<shipHolder *> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
 {
-    for (int i = gameCounter; i<=totalRounds; i++){
+    cout << "The intergalactic battle begins! \n"
+    << " Prepare your defences, ready your weapons and launch your attacks!" << endl;
 
-        cout << "=== " << "ROUND " << i << " ==="<< "\n\n";
+    for (int round = 1; round <= totalRounds; round++)
+    {
+        cout << "=== " << "ROUND " << round << " ===" << "\n\n";
 
-        if(gameCounter == i){
+        // ship 2 uses (insertWEAPON)!
+        // ship 1 HIT by ship 2 ! Dmg -20
+        // or
+        // ship 2 MISSES!
 
-            cout << "The intergalactic battle begins! \n" << " Prepare your defences, ready your weapons and launch your attacks!" << endl;
+        // ship 1 uses (insertWEAPON)!
+        // ship 2 HIT by ship 1 ! Dmg -30
+
+        // ship x is destroyed!
+        // Z crew 1 and crew 2 dies!
+
+        // summary
+        // Ship Z Total hit points : 100 
+        // Ship R Total hit points : 120
+
+        if (round == totalRounds)
+        {
+            cout << "=== GAME OVER ===" << "\n\n";
+
+            cout << winningTeam << "WINS!" << endl;
         }
-
-
-
-
-
-
-
-
-
-
-        if( i == totalRounds ){
-
-            cout << "=== " << "GAME OVER" << i << " ==="<< "\n\n";
-
-            cout << winningTeam << "WINS!"<< endl;
-        }
-
     }
-
 }
