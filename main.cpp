@@ -13,12 +13,36 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include "BattleshipClasses.h"
 #include "functions.h"
 #include "script.h"
 
 using namespace std;
+
+struct weapon{
+    short power = 96;
+};
+
+class Battleships{
+    private:
+        int health_points;
+        std::vector<std::string> pilots;
+        weapon light_cannon;
+
+    public:
+        Battleships(){
+            health_points = 100;
+
+        }  
+        void damageTaken(int damage){
+            health_points -= damage;
+        }
+        void addPilot(std::string pilotName){
+            pilots.push_back(pilotName);
+        }
+};
 
 int main(int argc, char *argv[])
 {
