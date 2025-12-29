@@ -6,6 +6,26 @@
 
 using namespace std;
 
+class Battleships{
+    private:
+        int health_points;
+        string shipName,shipID;
+        struct weapon{
+            short power;
+            float getHit;
+        }weapon;
+
+    public:
+        Battleships(int hp, string id, string name){
+            health_points = hp;
+            shipID = id;
+            shipName = name;
+        }  
+        void damageTaken(int damage){
+            health_points -= damage;
+        }
+};
+
 // EMPTY CLASSES JUST AS PLACEHOLDERS
 /////////////////////////////// MAIN PARENT CLASS
 class shipHolder{
