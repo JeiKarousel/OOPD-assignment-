@@ -159,10 +159,10 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
     {
         stringstream stream2(content);
 
-        // get id, shiptype then name
+        // get id, crewtype then name
         getline(stream2, CREW_id, ',');
-        getline(stream2, CREW_type, ',');
-        getline(stream2, CREW_name);
+        getline(stream2, CREW_name, ',');
+        getline(stream2, CREW_type);
 
         crewHolder *c = nullptr;
 
