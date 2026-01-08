@@ -6,21 +6,38 @@
 
 using namespace std;
 
+// Base Initialisation of the Battleship format
 class Battleships{
-    private:
+    protected:
         int health_points;
         string shipName,shipID;
+        short hitByCannon, hitByTorpedo, requiredPilots, requiredGunners, requiredTorpedoHandlers;
         struct weapon{
-            short power;
-            float getHit;
-        }weapon;
+            short amount;
+            int power;
+        }lightCannon, torpedo;
 
     public:
         Battleships(int hp, string id, string name){
             health_points = hp;
             shipID = id;
             shipName = name;
-        }  
+        }
+
+        void shipCrew(short pilot, short gunner, short torpedoHandler){
+            short requiredPilots = pilot;
+            short requiredGunners = gunner;
+            short requiredTorpedoHandlers = torpedoHandler;
+        }
+        
+        int showLightCannonHitChance(){
+            return hitByCannon;
+        }
+
+        int showTorpedoHitChance(){
+            return hitByTorpedo;
+        }
+
         void damageTaken(int damage){
             health_points -= damage;
         }
@@ -41,10 +58,16 @@ class shipHolder{
 };
 
 /////////////////////////////// ALL ARE Z
-class Guerriero : public shipHolder{
+class Guerriero : public Battleships{
 
     public:
-    Guerriero(string SHIP_ID, string SHIP_name) : shipHolder( SHIP_ID, SHIP_name) {}
+    Guerriero(int hp, string id, string name) : Battleships(hp, id, name){
+        short hitByCannon = 26;
+        short hitByTorpedo = 6;
+        lightCannon.power = 96;
+        lightCannon.amount = 1;
+        shipCrew(1,0,0);
+    }
 };
 
 class Medio : public shipHolder{

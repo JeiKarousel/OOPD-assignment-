@@ -69,6 +69,8 @@ void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
     string SHIP_id, SHIP_name, SHIP_type, content;
 
     // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
+
+    //Will fix ships later
     while (getline(inFile1, content, '\n'))
     {
         stringstream stream2(content);
