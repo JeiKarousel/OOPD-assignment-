@@ -1,3 +1,6 @@
+#ifndef BattleshipClasses_h
+#define BattleshipClasses_h
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -143,5 +146,4 @@ class Fregatte : public Battleships{
     }
 };
 
-
-
+#endif // BattleshipClasses_h
