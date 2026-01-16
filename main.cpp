@@ -24,14 +24,14 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // initializing the vectors and variables used
-    vector<Battleships *> zShipTest;
-    vector<Battleships *> rShipTest;
-    vector<crewHolder *> zCrewTest;
-    vector<crewHolder *> rCrewTest;
+    vector<Battleships *> zShip;
+    vector<Battleships *> rShip;
+    vector<crewHolder *> zCrew;
+    vector<crewHolder *> rCrew;
 
     string userInput;
 
-    cout << "Battleship time! Enter the filenames: " << endl;
+    cout << "Battleship time!" << endl;
     // Example input: XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
 
     // make sure there are 5 arguments
@@ -65,13 +65,13 @@ int main(int argc, char *argv[])
         {
             if (isShips)
             {
-                Read_zShipFromFile(inFile1, zShipTest);
+                Read_zShipFromFile(inFile1, zShip);
                 inFile1.close();
             }
 
             if (isCrew)
             {
-               Read_CrewFromFile(inFile1, zCrewTest);
+               Read_CrewFromFile(inFile1, zCrew);
                inFile1.close();
             }
         }
@@ -81,18 +81,19 @@ int main(int argc, char *argv[])
         {
             if (isShips)
             {
-                Read_rShipFromFile(inFile1, rShipTest);
+                Read_rShipFromFile(inFile1, rShip);
                 inFile1.close();
             }
 
             if (isCrew)
             {
-               Read_CrewFromFile(inFile1, rCrewTest);
+               Read_CrewFromFile(inFile1, rCrew);
                inFile1.close();
             }
         }
-
-        // WHERE WE SHOULD DELETE THE OBJECTS
-        return 0;
     }
+
+    // start the battle simulation
+    runScript(totalRounds, winningTeam, zShip, rShip, zCrew, rCrew);
+    return 0;
 }
