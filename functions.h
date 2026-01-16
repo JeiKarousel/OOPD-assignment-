@@ -6,6 +6,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
+#include "BattleshipClasses.h"
 
 using namespace std;
 
@@ -13,6 +16,15 @@ bool isZapezoid = false;
 bool isRogoatuskan = false;
 bool isCrew = false;
 bool isShips = false;
+
+string trim(const string& str)
+{
+    size_t first = str.find_first_not_of(" \t\r\n");
+    if (first == string::npos)
+        return "";
+    size_t last = str.find_last_not_of(" \t\r\n");
+    return str.substr(first, (last - first + 1));
+}
 
 // Checks if the file is a CSV file
 bool check_File_isCSV(const string filename)
@@ -34,19 +46,17 @@ bool check_Sides(const string filename)
     isCrew = false;
     isShips = false;
 
-    if (filename.size() <= 4)
-    {
-        cout << "Invalid filename!" << endl;
+    if (filename.size() <= 4){
+        cout << "Invalid filename!" << filename << endl;
         return 1;
     }
-
     if (filename[0] == 'z')
     {
-        return isZapezoid = true;
+        isZapezoid = true;
     }
     else if (filename[0] == 'r')
     {
-        return isRogoatuskan = true;
+        isRogoatuskan = true;
     }
     else
     {
@@ -54,17 +64,17 @@ bool check_Sides(const string filename)
         return 1;
     }
 
-    if (filename.substr(1, (filename.size() - 4)) == "Ships" || filename.substr(1, (filename.size() - 5)) == "Ships")
+    if (filename.find("Ships") != string::npos)
     {
         isShips = true;
     }
-    else if (filename.substr(1, (filename.size() - 4)) == "Crew" || filename.substr(1, (filename.size() - 5)) == "Crew")
+    else if (filename.find("Crew") != string::npos)
     {
         isCrew = true;
     }
     else
     {
-        cout << "Invalid filename!" << endl;
+        cout << "Invalid filename!" << filename << endl;
         return 1;
     }
     return 0;
@@ -76,12 +86,11 @@ bool check_Sides(const string filename)
 // 3SR, Fregatte, Name3
 
 // ALL ZAPEZOID
-void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShipTest)
+void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
     // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
-
     //Will fix ships later
     while (getline(inFile1, content, '\n'))
     {
@@ -92,29 +101,25 @@ void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        Battleships *s = nullptr;
+        SHIP_type = trim(SHIP_type);
 
-        // create an object depending on ship type
         if (SHIP_type == "Guerriero")
         {
-            s = new Guerriero(123, SHIP_id, SHIP_name);
+            zShip.push_back(new Guerriero(123, SHIP_id, SHIP_name));
         }
         else if (SHIP_type == "Medio")
         {
-            s = new Medio(214, SHIP_id, SHIP_name);
+            zShip.push_back(new Medio(214, SHIP_id, SHIP_name));
         }
         else if (SHIP_type == "Corazzata")
         {
-            s = new Corazzata(1031, SHIP_id, SHIP_name);
+            zShip.push_back(new Corazzata(1031, SHIP_id, SHIP_name));
         }
         else
         {
             cout << "Ship type not found! In file line " << content << "!" << endl;
             continue;
         }
-
-        // push the pointer into the respective vectors
-        zShipTest.push_back(s);
     }
 }
 // EXAMPLE FILE CONTENT:
@@ -137,29 +142,26 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        Battleships *s = nullptr;
+        SHIP_type = trim(SHIP_type);
 
         // create an object depending on ship type
         if (SHIP_type == "Jager")
         {
-            s = new Jager(112, SHIP_id, SHIP_name);
+            rShipTest.push_back(new Jager(112, SHIP_id, SHIP_name));
         }
         else if (SHIP_type == "Kreuzer")
         {
-            s = new Kreuzer(212, SHIP_id, SHIP_name);
+            rShipTest.push_back(new Kreuzer(212, SHIP_id, SHIP_name));
         }
         else if (SHIP_type == "Fregatte")
         {
-            s = new Fregatte(1143, SHIP_id, SHIP_name);
+            rShipTest.push_back(new Fregatte(1143, SHIP_id, SHIP_name));
         }
         else
         {
             cout << "Ship type not found! In file line " << content << "!" << endl;
             continue;
         }
-
-        // push the pointer into the respective vectors
-        rShipTest.push_back(s);
     }
 }
 
@@ -169,8 +171,12 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
     string CREW_id, CREW_name, CREW_type, content;
 
     // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
-    while (getline(inFile1, content, '\n'))
-    {
+    while (getline(inFile1, content)) {
+
+        if (content.empty()) {
+            continue;
+        }
+        
         stringstream stream2(content);
 
         // get id, crewtype then name
@@ -178,30 +184,101 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         getline(stream2, CREW_name, ',');
         getline(stream2, CREW_type);
 
+        CREW_type = trim(CREW_type);
+
         crewHolder *c = nullptr;
 
         // create an object depending on crew type
         if (CREW_type == "pilot")
         {
-            c = new pilot(CREW_id, CREW_name);
+            CrewVector.push_back(new pilot(CREW_id, CREW_name));
         }
         else if (CREW_type == "gunner")
         {
-            c = new gunner(CREW_id, CREW_name);
+            CrewVector.push_back(new gunner(CREW_id, CREW_name));
         }
-        else if (CREW_type == "torpedohandler")
+        else if (CREW_type == "torpedohandler" || CREW_type == "torpedo handler")
         {
-            c = new torpedohandler(CREW_id, CREW_name);
+            CrewVector.push_back(new torpedohandler(CREW_id, CREW_name));
         }
         else
         {
-            cout << "Crew type not found! In file name " << content << "!" << endl;
+            if (CREW_id.find("source") == string::npos) {
+                 cout << "Unknown crew type: [" << CREW_type << "] in line: " << content << endl;
+            }
             continue;
         }
-
-        // push the pointer into the respective vectors
-        CrewVector.push_back(c);
     }
+}
+
+// Function to assign crews to ships
+void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ships) {
+    vector <pilot*> availablePilots;
+    vector <gunner*> availableGunners;
+    vector <torpedohandler*> availableTorpedoHandlers;
+
+
+    for (crewHolder* c : crew) {
+        if (pilot* p = dynamic_cast<pilot*>(c)) {
+            availablePilots.push_back(p);
+        } else if (gunner* g = dynamic_cast<gunner*>(c)) {
+            availableGunners.push_back(g);
+        } else if (torpedohandler* t = dynamic_cast<torpedohandler*>(c)) {
+            availableTorpedoHandlers.push_back(t);
+        }
+    }
+
+    int totalPilots = availablePilots.size();
+
+    for (Battleships* ship : ships) {
+        if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
+            ship->assignPilot();
+            availablePilots.pop_back();
+        }
+    }
+
+    bool pilotAssigned = true;
+    while (pilotAssigned && !availablePilots.empty())
+    {
+        pilotAssigned = false;
+        for (Battleships* ship : ships) {
+            if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
+                ship->assignPilot();
+                availablePilots.pop_back();
+                pilotAssigned = true;
+            }
+        }
+    }
+
+    bool gunnerAssigned = true;
+    while (gunnerAssigned && !availableGunners.empty())
+    {
+        gunnerAssigned = false;
+        for (Battleships* ship : ships) {
+            if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners) {
+                ship->assignGunner();
+                availableGunners.pop_back();
+                gunnerAssigned = true;
+            }
+        }
+    }
+
+    bool torpedoHandlerAssigned = true;
+    while (torpedoHandlerAssigned && !availableTorpedoHandlers.empty())
+    {
+        torpedoHandlerAssigned = false;
+        for (Battleships* ship : ships) {
+            if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers) {
+                ship->assignTorpedoHandler();
+                availableTorpedoHandlers.pop_back();
+                torpedoHandlerAssigned = true;
+            }
+        }
+    }
+
+    int assignedCount = (totalPilots - availablePilots.size());
+    cout << "Crew assignment completed." << endl << "Total pilots assigned: " << assignedCount << endl << endl;
+    
 }
 
 #endif
