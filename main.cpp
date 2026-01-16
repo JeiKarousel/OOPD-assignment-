@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     string userInput;
 
-    cout << "Battleship time!" << endl;
+    cout << "Battleship time!" << endl << endl;
     // Example input: XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
 
     // make sure there are 5 arguments
@@ -92,6 +92,10 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    cout << "Assigning crews to ships..." << endl;
+    assign_Crew_to_Ship(zCrew, zShip);
+    assign_Crew_to_Ship(rCrew, rShip);
 
     // start the battle simulation
     runScript(totalRounds, winningTeam, zShip, rShip, zCrew, rCrew);

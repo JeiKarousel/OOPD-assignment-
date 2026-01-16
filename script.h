@@ -21,7 +21,7 @@ string winningTeam;
 void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShipTest, vector<Battleships *> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
 {
     cout << "The intergalactic battle begins! \n"
-    << " Prepare your defences, ready your weapons and launch your attacks!" << endl;
+    << "Prepare your defences, ready your weapons and launch your attacks!" << endl << endl;
 
     for (int round = 1; round <= totalRounds; round++)
     {
