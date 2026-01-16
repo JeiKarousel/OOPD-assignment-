@@ -64,7 +64,7 @@ bool check_Sides(const string filename)
 // 3SR, Fregatte, Name3
 
 // ALL ZAPEZOID
-void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
+void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
@@ -80,7 +80,7 @@ void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        shipHolder *s = nullptr;
+        Battleships *s = nullptr;
 
         // create an object depending on ship type
         if (SHIP_type == "Guerriero")
@@ -111,7 +111,7 @@ void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
 // 5CZ, gato, gunner
 
 // ALL ROGOATUSKAN 
-void Read_rShipFromFile(ifstream &inFile1, vector<shipHolder *> &rShipTest)
+void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
@@ -125,7 +125,7 @@ void Read_rShipFromFile(ifstream &inFile1, vector<shipHolder *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        shipHolder *s = nullptr;
+        Battleships *s = nullptr;
 
         // create an object depending on ship type
         if (SHIP_type == "Jager")

@@ -24,8 +24,8 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // initializing the vectors and variables used
-    vector<shipHolder *> zShipTest;
-    vector<shipHolder *> rShipTest;
+    vector<Battleships *> zShipTest;
+    vector<Battleships *> rShipTest;
     vector<crewHolder *> zCrewTest;
     vector<crewHolder *> rCrewTest;
 

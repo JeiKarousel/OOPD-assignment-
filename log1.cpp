@@ -71,8 +71,8 @@
 
 // int main(int argc, char *argv[])
 // {
-//     vector<shipHolder*> zShipTest;
-//     vector<shipHolder*> sShipTest;
+//     vector<Battleships*> zShipTest;
+//     vector<Battleships*> sShipTest;
 //     vector<crewHolder*> zCrewTest;
 //     vector<crewHolder*> sCrewTest;
 
@@ -137,7 +137,7 @@
 //                     getline(stream2, SHIP_type, ',');
 //                     getline(stream2, SHIP_name);
 
-//                     shipHolder s;
+//                     Battleships s;
 //                     s.shipID = SHIP_id;
 //                     s.shipType = SHIP_type;
 //                     s.shipName = SHIP_name;
