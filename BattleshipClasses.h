@@ -14,11 +14,13 @@ class crewHolder{
     protected: 
     string crewType, crewName, crewID;
 
-    crewHolder(string a, string b){
+    public:
+    crewHolder(string id, string name){
 
-        a = crewID;
-        b = crewName;
+        crewID = id;
+        crewName = name;
     }
+    virtual ~crewHolder(){}
 };
 
 class pilot : public crewHolder{
@@ -42,13 +44,15 @@ class Battleships{
     protected:
         int health_points;
         string shipName,shipID;
-        short hitByCannon, hitByTorpedo, requiredPilots, requiredGunners, requiredTorpedoHandlers;
+        short hitByCannon, hitByTorpedo;
         struct weapon{
             short amount;
             int power;
         }lightCannon, torpedo;
 
     public:
+        short requiredPilots, requiredGunners, requiredTorpedoHandlers;
+        short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
         Battleships(int hp, string id, string name){
             health_points = hp;
             shipID = id;
@@ -56,9 +60,21 @@ class Battleships{
         }
 
         void shipCrew(short pilot, short gunner, short torpedoHandler){
-            short requiredPilots = pilot;
-            short requiredGunners = gunner;
-            short requiredTorpedoHandlers = torpedoHandler;
+            requiredPilots = pilot;
+            requiredGunners = gunner;
+            requiredTorpedoHandlers = torpedoHandler;
+        }
+
+        void assignPilot(){
+            currentPilots++;
+        }
+
+        void assignGunner(){
+            currentGunners++;
+        }
+
+        void assignTorpedoHandler(){
+            currentTorpedoHandlers++;
         }
         
         int showLightCannonHitChance(){
@@ -71,6 +87,14 @@ class Battleships{
 
         void damageTaken(int damage){
             health_points -= damage;
+        }
+
+        int getHealthPoints(){
+            return health_points;
+        }
+
+        string getShipName(){
+            return shipName;
         }
 };
 
@@ -115,7 +139,7 @@ class Corazzata : public Battleships{
 /////////////////////////////////// ALL ARE R
 class Jager : public Battleships{
     public:
-    Jager(int hp, string id, string name) : Battleships(hp, id, name) {
+    Jager(int hp, string id, string name) : Battleships(112, id, name) {
         short hitByCannon  = 24;
         short hitByTorpedo = 5;
         lightCannon.power  = 101;
@@ -126,7 +150,7 @@ class Jager : public Battleships{
 
 class Kreuzer : public Battleships{
     public:
-    Kreuzer(int hp, string id, string name) : Battleships(hp, id, name) {
+    Kreuzer(int hp, string id, string name) : Battleships(212, id, name) {
         short hitByCannon  = 29;
         short hitByTorpedo = 10;
         lightCannon.power  = 132;
@@ -137,7 +161,7 @@ class Kreuzer : public Battleships{
 
 class Fregatte : public Battleships{
     public:
-    Fregatte(int hp, string id, string name) : Battleships(hp, id, name) {
+    Fregatte(int hp, string id, string name) : Battleships(1143, id, name) {
         short hitByCannon  = 60;
         short hitByTorpedo = 30;
         lightCannon.power  = 159;
