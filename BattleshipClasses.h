@@ -112,16 +112,35 @@ class Corazzata : public Battleships{
 /////////////////////////////////// ALL ARE R
 class Jager : public Battleships{
     public:
-    Jager(int hp, string id, string name) : Battleships(123, id, name) {}
+    Jager(int hp, string id, string name) : Battleships(hp, id, name) {
+        short hitByCannon  = 24;
+        short hitByTorpedo = 5;
+        lightCannon.power  = 101;
+        lightCannon.amount = 1;
+        shipCrew(1,0,0);
+    }
 };
 
 class Kreuzer : public Battleships{
     public:
-    Kreuzer(int hp, string id, string name) : Battleships(214, id, name) {}
+    Kreuzer(int hp, string id, string name) : Battleships(hp, id, name) {
+        short hitByCannon  = 29;
+        short hitByTorpedo = 10;
+        lightCannon.power  = 132;
+        lightCannon.amount = 2;
+        shipCrew(1,2,0);
+    }
 };
+
 class Fregatte : public Battleships{
     public:
-    Fregatte(int hp, string id, string name) : Battleships(1031, id, name) {}
+    Fregatte(int hp, string id, string name) : Battleships(hp, id, name) {
+        short hitByCannon  = 60;
+        short hitByTorpedo = 30;
+        lightCannon.power  = 159;
+        lightCannon.amount = 11;
+        shipCrew(2,11,5);
+    }
 };
 
 
