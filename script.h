@@ -12,13 +12,13 @@ using namespace std;
 int totalRounds = 5;
 string winningTeam;
 
-// vector<shipHolder *> zShipTest;
-// vector<shipHolder *> rShipTest;
+// vector<Battleships *> zShipTest;
+// vector<Battleships *> rShipTest;
 // vector<crewHolder *> zCrewTest;
 // vector<crewHolder *> rCrewTest;
 
 // THE GAME LOOP
-void runScript(const int &totalRounds, const string &winningTeam, vector<shipHolder *> &zShipTest, vector<shipHolder *> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
+void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShipTest, vector<Battleships *> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
 {
     cout << "The intergalactic battle begins! \n"
     << " Prepare your defences, ready your weapons and launch your attacks!" << endl;

@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,14 +22,22 @@ bool check_File_isCSV(const string filename)
         cout << "Invalid type of file! " << endl;
         return 1;
     }
+    return 0;
 }
 
 // Checks if the file is a Zapezoid, Rogoatuskan and if it is a ship or crew
 bool check_Sides(const string filename)
 {
+
+    isZapezoid = false;
+    isRogoatuskan = false;
+    isCrew = false;
+    isShips = false;
+
     if (filename.size() <= 4)
     {
         cout << "Invalid filename!" << endl;
+        return 1;
     }
 
     if (filename[0] == 'z')
@@ -56,6 +67,7 @@ bool check_Sides(const string filename)
         cout << "Invalid filename!" << endl;
         return 1;
     }
+    return 0;
 }
 
 // EXAMPLE FILE CONTENT:
@@ -64,7 +76,7 @@ bool check_Sides(const string filename)
 // 3SR, Fregatte, Name3
 
 // ALL ZAPEZOID
-void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
+void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
@@ -80,20 +92,20 @@ void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        shipHolder *s = nullptr;
+        Battleships *s = nullptr;
 
         // create an object depending on ship type
         if (SHIP_type == "Guerriero")
         {
-            s = new Guerriero(SHIP_id, SHIP_name);
+            s = new Guerriero(123, SHIP_id, SHIP_name);
         }
         else if (SHIP_type == "Medio")
         {
-            s = new Medio(SHIP_id, SHIP_name);
+            s = new Medio(214, SHIP_id, SHIP_name);
         }
         else if (SHIP_type == "Corazzata")
         {
-            s = new Corazzata(SHIP_id, SHIP_name);
+            s = new Corazzata(1031, SHIP_id, SHIP_name);
         }
         else
         {
@@ -111,7 +123,7 @@ void Read_zShipFromFile(ifstream &inFile1, vector<shipHolder *> &zShipTest)
 // 5CZ, gato, gunner
 
 // ALL ROGOATUSKAN 
-void Read_rShipFromFile(ifstream &inFile1, vector<shipHolder *> &rShipTest)
+void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
@@ -125,20 +137,20 @@ void Read_rShipFromFile(ifstream &inFile1, vector<shipHolder *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        shipHolder *s = nullptr;
+        Battleships *s = nullptr;
 
         // create an object depending on ship type
         if (SHIP_type == "Jager")
         {
-            s = new Jager(SHIP_id, SHIP_name);
+            s = new Jager(112, SHIP_id, SHIP_name);
         }
         else if (SHIP_type == "Kreuzer")
         {
-            s = new Kreuzer(SHIP_id, SHIP_name);
+            s = new Kreuzer(212, SHIP_id, SHIP_name);
         }
         else if (SHIP_type == "Fregatte")
         {
-            s = new Fregatte(SHIP_id, SHIP_name);
+            s = new Fregatte(1143, SHIP_id, SHIP_name);
         }
         else
         {
@@ -192,3 +204,4 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
     }
 }
 
+#endif
