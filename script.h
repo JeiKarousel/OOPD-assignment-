@@ -18,10 +18,19 @@ string winningTeam;
 // vector<crewHolder *> rCrewTest;
 
 // THE GAME LOOP
-void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShipTest, vector<Battleships *> &rShipTest, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
+void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShip, vector<Battleships *> &rShip, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
 {
-    cout << "The intergalactic battle begins! \n"
-    << "Prepare your defences, ready your weapons and launch your attacks!" << endl << endl;
+    // cout << "The intergalactic battle begins! \n"
+    //      << "Prepare your defences, ready your weapons and launch your attacks!" << endl
+    //      << endl;
+
+    cout << "Loading data files...\n"
+         << "========================================\n"
+         << "    FLEET CONFIGURATION REPORT   "
+         << "========================================\n";
+
+    cout << "--- ZAPEZOID FLEET ---\n";
+    DisplayZapezoidFleet(zShip);
 
     for (int round = 1; round <= totalRounds; round++)
     {
@@ -39,8 +48,18 @@ void runScript(const int &totalRounds, const string &winningTeam, vector<Battles
         // Z crew 1 and crew 2 dies!
 
         // summary
-        // Ship Z Total hit points : 100 
+        // Ship Z Total hit points : 100
         // Ship R Total hit points : 120
+
+        // TEST STARTS HERE
+        // vector<Battleships *> zShip;
+        // vector<Battleships *> rShip;
+        // vector<crewHolder *> zCrew;
+        // vector<crewHolder *> rCrew;
+
+        while ((!zShip.empty() || !rShip.empty()))
+        {
+        }
 
         if (round == totalRounds)
         {
