@@ -233,7 +233,8 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
 
     for (Battleships* ship : ships) {
         if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
-            ship->assignPilot();
+            pilot* loadingCrew = availablePilots.back();
+            ship->assignPilot(loadingCrew);
             availablePilots.pop_back();
         }
     }
