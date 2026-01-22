@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    cout << "Assigning crews to ships..." << endl;
     assign_Crew_to_Ship(zCrew, zShip);
     assign_Crew_to_Ship(rCrew, rShip);
 
