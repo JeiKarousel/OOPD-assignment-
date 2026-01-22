@@ -233,7 +233,8 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
 
     for (Battleships* ship : ships) {
         if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
-            ship->assignPilot();
+            pilot* loadingCrew = availablePilots.back();
+            ship->assignPilot(loadingCrew);
             availablePilots.pop_back();
         }
     }
@@ -244,7 +245,8 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         pilotAssigned = false;
         for (Battleships* ship : ships) {
             if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
-                ship->assignPilot();
+                pilot* loadingCrew = availablePilots.back();
+                ship->assignPilot(loadingCrew);
                 availablePilots.pop_back();
                 pilotAssigned = true;
             }
@@ -257,7 +259,8 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         gunnerAssigned = false;
         for (Battleships* ship : ships) {
             if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners) {
-                ship->assignGunner();
+                gunner* loadingCrew = availableGunners.back();
+                ship->assignGunner(loadingCrew);
                 availableGunners.pop_back();
                 gunnerAssigned = true;
             }
@@ -270,16 +273,13 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         torpedoHandlerAssigned = false;
         for (Battleships* ship : ships) {
             if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers) {
-                ship->assignTorpedoHandler();
+                torpedohandler* loadingCrew = availableTorpedoHandlers.back();
+                ship->assignTorpedoHandler(loadingCrew);
                 availableTorpedoHandlers.pop_back();
                 torpedoHandlerAssigned = true;
             }
         }
-    }
-
-    int assignedCount = (totalPilots - availablePilots.size());
-    cout << "Crew assignment completed." << endl << "Total pilots assigned: " << assignedCount << endl << endl;
-    
+    }  
 }
 
 // DISPLAY Zapezoid fleet 
@@ -289,6 +289,15 @@ void DisplayZapezoidFleet(vector<Battleships*> zShip){
     for( int i = 0; i< zShip.size(); i++){
     cout << "[Z-S-" << 001 << "]"  << zShip[i]->getShipName() << left << setw(10) << "(" << zShip[i]->getShipType() << ")" << endl;
     cout << right <<" HP: " << zShip[i]->getHealthPoints() << "/" << zShip[i]->getHealthPoints() << endl;
+    for (pilot* p : zShip[i]->getPilots()) {
+        cout << " Pilots (" << zShip[i]->currentPilots << "): " << p->getName() << endl;
+    }
+    for (gunner* g : zShip[i]->getGunners()) {
+        cout << " Gunners (" << zShip[i]->currentGunners << "): " << g->getName() << endl;
+    }
+    for (torpedohandler* t : zShip[i]->getTorpedoHandlers()) {
+        cout << " Torpedo Handlers (" << zShip[i]->currentTorpedoHandlers << "): " << t->getName() << endl;
+    }
     
     cout << "--------------------------------------------------";
     }

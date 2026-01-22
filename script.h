@@ -26,7 +26,7 @@ void runScript(const int &totalRounds, const string &winningTeam, vector<Battles
 
     cout << "Loading data files...\n"
          << "========================================\n"
-         << "    FLEET CONFIGURATION REPORT   "
+         << "    FLEET CONFIGURATION REPORT   \n"
          << "========================================\n";
 
     cout << "--- ZAPEZOID FLEET ---\n";

@@ -23,6 +23,14 @@ public:
         crewName = name;
     }
     virtual ~crewHolder() {}
+
+    string getID() {
+        return crewID;
+    }
+
+    string getName() {
+        return crewName;
+    }
 };
 
 class pilot : public crewHolder
@@ -56,6 +64,9 @@ protected:
         short amount;
         int power;
     } lightCannon, torpedo;
+    vector<pilot*> pilotCrew;
+    vector<gunner*> gunnerCrew;
+    vector<torpedohandler*> torpedoHandlerCrew;
 
 public:
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
@@ -67,26 +78,44 @@ public:
         shipName = name;
     }
 
-    void shipCrew(short pilot, short gunner, short torpedoHandler)
+    void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
         requiredGunners = gunner;
         requiredTorpedoHandlers = torpedoHandler;
     }
 
-    void assignPilot()
+    void assignPilot(pilot* pilotMember)
     {
+        pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
-    void assignGunner()
+    void assignGunner(gunner* gunnerMember)
     {
+        gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
-    void assignTorpedoHandler()
+    void assignTorpedoHandler(torpedohandler* torpedoHandlerMember)
     {
+        torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
+    }
+
+    vector<pilot*> getPilots()
+    {
+        return pilotCrew;
+    }
+
+    vector<gunner*> getGunners()
+    {
+        return gunnerCrew;
+    }
+
+    vector<torpedohandler*> getTorpedoHandlers()
+    {
+        return torpedoHandlerCrew;
     }
 
     int showLightCannonHitChance()
@@ -131,7 +160,7 @@ public:
         hitByTorpedo = 6;
         lightCannon.power = 96;
         lightCannon.amount = 1;
-        shipCrew(1, 0, 0);
+        requiredCrew(1, 0, 0);
     }
 
     string getShipType() const override
@@ -150,7 +179,7 @@ public:
         hitByTorpedo = 11;
         lightCannon.power = 134;
         lightCannon.amount = 2;
-        shipCrew(1, 2, 0);
+        requiredCrew(1, 2, 0);
     }
     
     string getShipType() const override
@@ -170,7 +199,7 @@ public:
         lightCannon.amount = 10;
         torpedo.power = 293;
         torpedo.amount = 4;
-        shipCrew(2, 10, 4);
+        requiredCrew(2, 10, 4);
     }
 
     string getShipType() const override
@@ -189,7 +218,7 @@ public:
         hitByTorpedo = 5;
         lightCannon.power = 101;
         lightCannon.amount = 1;
-        shipCrew(1, 0, 0);
+        requiredCrew(1, 0, 0);
     }
     string getShipType() const override
     {
@@ -206,7 +235,7 @@ public:
         hitByTorpedo = 10;
         lightCannon.power = 132;
         lightCannon.amount = 2;
-        shipCrew(1, 2, 0);
+        requiredCrew(1, 2, 0);
     }
     string getShipType() const override
     {
@@ -223,7 +252,7 @@ public:
         hitByTorpedo = 30;
         lightCannon.power = 159;
         lightCannon.amount = 11;
-        shipCrew(2, 11, 5);
+        requiredCrew(2, 11, 5);
     }
     string getShipType() const override
     {
