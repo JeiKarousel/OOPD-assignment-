@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cctype>
 #include "BattleshipClasses.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -280,5 +281,28 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
     cout << "Crew assignment completed." << endl << "Total pilots assigned: " << assignedCount << endl << endl;
     
 }
+
+// DISPLAY Zapezoid fleet 
+
+void DisplayZapezoidFleet(vector<Battleships*> zShip){
+
+    for( int i = 0; i< zShip.size(); i++){
+    cout << "[Z-S-" << 001 << "]"  << zShip[i]->getShipName() << left << setw(10) << "(" << zShip[i]->getShipType() << ")" << endl;
+    cout << right <<" HP: " << zShip[i]->getHealthPoints() << "/" << zShip[i]->getHealthPoints() << endl;
+    
+    cout << "--------------------------------------------------";
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
 
 #endif
