@@ -23,6 +23,14 @@ public:
         crewName = name;
     }
     virtual ~crewHolder() {}
+
+    string getID() {
+        return crewID;
+    }
+
+    string getName() {
+        return crewName;
+    }
 };
 
 class pilot : public crewHolder
@@ -93,6 +101,21 @@ public:
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
+    }
+
+    vector<pilot*> getPilots()
+    {
+        return pilotCrew;
+    }
+
+    vector<gunner*> getGunners()
+    {
+        return gunnerCrew;
+    }
+
+    vector<torpedohandler*> getTorpedoHandlers()
+    {
+        return torpedoHandlerCrew;
     }
 
     int showLightCannonHitChance()
