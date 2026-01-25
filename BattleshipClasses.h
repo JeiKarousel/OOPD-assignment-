@@ -1,3 +1,6 @@
+#ifndef BattleshipClasses_h
+#define BattleshipClasses_h
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -6,142 +9,255 @@
 
 using namespace std;
 
-// Base Initialisation of the Battleship format
-class Battleships{
-    protected:
-        int health_points;
-        string shipName,shipID;
-        short hitByCannon, hitByTorpedo, requiredPilots, requiredGunners, requiredTorpedoHandlers;
-        struct weapon{
-            short amount;
-            int power;
-        }lightCannon, torpedo;
+/////////////////////////////////////// ALL CREWS
+class crewHolder
+{
+protected:
+    string crewType, crewName, crewID;
 
-    public:
-        Battleships(int hp, string id, string name){
-            health_points = hp;
-            shipID = id;
-            shipName = name;
-        }
+public:
+    crewHolder(string id, string name)
+    {
 
-        void shipCrew(short pilot, short gunner, short torpedoHandler){
-            short requiredPilots = pilot;
-            short requiredGunners = gunner;
-            short requiredTorpedoHandlers = torpedoHandler;
-        }
-        
-        int showLightCannonHitChance(){
-            return hitByCannon;
-        }
+        crewID = id;
+        crewName = name;
+    }
+    virtual ~crewHolder() {}
 
-        int showTorpedoHitChance(){
-            return hitByTorpedo;
-        }
+    string getID() {
+        return crewID;
+    }
 
-        void damageTaken(int damage){
-            health_points -= damage;
-        }
+    string getName() {
+        return crewName;
+    }
 };
 
-// EMPTY CLASSES JUST AS PLACEHOLDERS
-/////////////////////////////// MAIN PARENT CLASS
-class shipHolder{
+class pilot : public crewHolder
+{
 
-    public: 
-    string shipType, shipName, shipID;
+public:
+    pilot(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
+};
 
-    shipHolder(string a, string b){
+class gunner : public crewHolder
+{
+public:
+    gunner(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
+};
 
-        a = shipID;
-        b = shipName;
+class torpedohandler : public crewHolder
+{
+public:
+    torpedohandler(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
+};
+
+// Base Initialisation of the Battleship format
+class Battleships
+{
+protected:
+    int health_points;
+    string shipName, shipID, shipType;
+    short hitByCannon, hitByTorpedo;
+    struct weapon
+    {
+        short amount;
+        int power;
+    } lightCannon, torpedo;
+    vector<pilot*> pilotCrew;
+    vector<gunner*> gunnerCrew;
+    vector<torpedohandler*> torpedoHandlerCrew;
+
+public:
+    short requiredPilots, requiredGunners, requiredTorpedoHandlers;
+    short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
+    Battleships(int hp, string id, string name)
+    {
+        health_points = hp;
+        shipID = id;
+        shipName = name;
+    }
+
+    void requiredCrew(short pilot, short gunner, short torpedoHandler)
+    {
+        requiredPilots = pilot;
+        requiredGunners = gunner;
+        requiredTorpedoHandlers = torpedoHandler;
+    }
+
+    void assignPilot(pilot* pilotMember)
+    {
+        pilotCrew.push_back(pilotMember);
+        currentPilots++;
+    }
+
+    void assignGunner(gunner* gunnerMember)
+    {
+        gunnerCrew.push_back(gunnerMember);
+        currentGunners++;
+    }
+
+    void assignTorpedoHandler(torpedohandler* torpedoHandlerMember)
+    {
+        torpedoHandlerCrew.push_back(torpedoHandlerMember);
+        currentTorpedoHandlers++;
+    }
+
+    vector<pilot*> getPilots()
+    {
+        return pilotCrew;
+    }
+
+    vector<gunner*> getGunners()
+    {
+        return gunnerCrew;
+    }
+
+    vector<torpedohandler*> getTorpedoHandlers()
+    {
+        return torpedoHandlerCrew;
+    }
+
+    int showLightCannonHitChance()
+    {
+        return hitByCannon;
+    }
+
+    int showTorpedoHitChance()
+    {
+        return hitByTorpedo;
+    }
+
+    void damageTaken(int damage)
+    {
+        health_points -= damage;
+    }
+
+    int getHealthPoints()
+    {
+        return health_points;
+    }
+
+    string getShipName()
+    {
+        return shipName;
+    }
+
+    virtual string getShipType() const
+    {
+        return shipType;
     }
 };
 
 /////////////////////////////// ALL ARE Z
-class Guerriero : public Battleships{
+class Guerriero : public Battleships
+{
 
-    public:
-    Guerriero(int hp, string id, string name) : Battleships(hp, id, name){
-        short hitByCannon = 26;
-        short hitByTorpedo = 6;
+public:
+    Guerriero(int hp, string id, string name) : Battleships(123, id, name)
+    {
+        hitByCannon = 26;
+        hitByTorpedo = 6;
         lightCannon.power = 96;
         lightCannon.amount = 1;
-        shipCrew(1,0,0);
+        requiredCrew(1, 0, 0);
+    }
+
+    string getShipType() const override
+    {
+        return "Guerriero";
     }
 };
 
-class Medio : public shipHolder{
-      
-    public:
-    Medio(string SHIP_ID, string SHIP_name) : shipHolder( SHIP_ID, SHIP_name) {}
-};
-class Corazzata : public shipHolder{
-      
-    public:
-    Corazzata(string SHIP_ID, string SHIP_name) : shipHolder( SHIP_ID, SHIP_name) {}
-};
+class Medio : public Battleships
+{
 
+public:
+    Medio(int hp, string id, string name) : Battleships(214, id, name)
+    {
+        hitByCannon = 31;
+        hitByTorpedo = 11;
+        lightCannon.power = 134;
+        lightCannon.amount = 2;
+        requiredCrew(1, 2, 0);
+    }
+    
+    string getShipType() const override
+    {
+        return "Medio";
+    }
+};
+class Corazzata : public Battleships
+{
+
+public:
+    Corazzata(int hp, string id, string name) : Battleships(1031, id, name)
+    {
+        hitByCannon = 50;
+        hitByTorpedo = 25;
+        lightCannon.power = 164;
+        lightCannon.amount = 10;
+        torpedo.power = 293;
+        torpedo.amount = 4;
+        requiredCrew(2, 10, 4);
+    }
+
+    string getShipType() const override
+    {
+        return "Corazzata";
+    }
+};
 
 /////////////////////////////////// ALL ARE R
-class Jager : public Battleships{
-    public:
-    Jager(int hp, string id, string name) : Battleships(hp, id, name) {
-        short hitByCannon  = 24;
-        short hitByTorpedo = 5;
-        lightCannon.power  = 101;
+class Jager : public Battleships
+{
+public:
+    Jager(int hp, string id, string name) : Battleships(112, id, name)
+    {
+        hitByCannon = 24;
+        hitByTorpedo = 5;
+        lightCannon.power = 101;
         lightCannon.amount = 1;
-        shipCrew(1,0,0);
+        requiredCrew(1, 0, 0);
+    }
+    string getShipType() const override
+    {
+        return "Jager";
     }
 };
 
-class Kreuzer : public Battleships{
-    public:
-    Kreuzer(int hp, string id, string name) : Battleships(hp, id, name) {
-        short hitByCannon  = 29;
-        short hitByTorpedo = 10;
-        lightCannon.power  = 132;
+class Kreuzer : public Battleships
+{
+public:
+    Kreuzer(int hp, string id, string name) : Battleships(212, id, name)
+    {
+        hitByCannon = 29;
+        hitByTorpedo = 10;
+        lightCannon.power = 132;
         lightCannon.amount = 2;
-        shipCrew(1,2,0);
+        requiredCrew(1, 2, 0);
+    }
+    string getShipType() const override
+    {
+        return "Kreuzer";
     }
 };
 
-class Fregatte : public Battleships{
-    public:
-    Fregatte(int hp, string id, string name) : Battleships(hp, id, name) {
-        short hitByCannon  = 60;
-        short hitByTorpedo = 30;
-        lightCannon.power  = 159;
+class Fregatte : public Battleships
+{
+public:
+    Fregatte(int hp, string id, string name) : Battleships(1143, id, name)
+    {
+        hitByCannon = 60;
+        hitByTorpedo = 30;
+        lightCannon.power = 159;
         lightCannon.amount = 11;
-        shipCrew(2,11,5);
+        requiredCrew(2, 11, 5);
+    }
+    string getShipType() const override
+    {
+        return "Fregatte";
     }
 };
 
-
-/////////////////////////////////////// ALL CREWS
-class crewHolder{
-    public: 
-    string crewType, crewName, crewID;
-
-    crewHolder(string a, string b){
-
-        a = crewID;
-        b = crewName;
-    }
-};
-
-class pilot : public crewHolder{
-
-    public:
-    pilot(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
-};
-
-class gunner : public crewHolder{
-    public:
-    gunner(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
-};
-
-class torpedohandler : public crewHolder{
-    public:
-    torpedohandler(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
-};
-
+#endif // BattleshipClasses_h
