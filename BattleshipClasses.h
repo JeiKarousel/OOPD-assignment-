@@ -55,17 +55,15 @@ public:
 class Battleships
 {
 protected:
-    int health_points;
+    int health_points, damageTaken;
     string shipName, shipID, shipType;
     short hitByCannon, hitByTorpedo;
-    int subtracted_health = 0;
-
     struct weapon
     {
         short amount;
         int power;
+        bool ableToShoot;
     } lightCannon, torpedo;
-    
     vector<pilot*> pilotCrew;
     vector<gunner*> gunnerCrew;
     vector<torpedohandler*> torpedoHandlerCrew;
@@ -74,6 +72,15 @@ public:
     bool canOperate = true;
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
+
+    //Default Constructor
+    Battleships()
+    {
+        health_points = 100;
+        shipID = 8008;
+        shipName = "Argos";
+    }
+
     Battleships(int hp, string id, string name)
     {
         health_points = hp;
@@ -81,6 +88,23 @@ public:
         shipName = name;
     }
 
+    //Operator Overloading
+    Battleships operator+(Battleships b){
+        Battleships c;
+        c.hitByCannon = this->hitByCannon + b.hitByCannon;
+        c.hitByTorpedo = this->hitByTorpedo + b.hitByTorpedo;
+        if(c.hitByCannon > 100)
+        {
+            c.hitByCannon = 100;
+        }
+        if(c.hitByTorpedo > 100)
+        {
+            c.hitByTorpedo = 100;
+        }
+        return c;
+    }
+
+    //Battleship Crew
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
@@ -121,26 +145,72 @@ public:
         return torpedoHandlerCrew;
     }
 
-    int showLightCannonHitChance()
+    void checkOperationStatus()
+    {
+        if(currentTorpedoHandlers < requiredTorpedoHandlers)
+        {
+            torpedo.ableToShoot = false;
+        }
+
+        if(currentGunners < requiredGunners)
+        {
+            lightCannon.ableToShoot = false;
+        }
+
+        if(currentPilots < requiredPilots)
+        {   
+            Battleships standBy, standBy2;
+            standBy.setHitByCannon(hitByCannon);
+            standBy.setHitByTorpedo(hitByTorpedo);
+            standBy2.setHitByCannon(hitByCannon * 0.25);
+            standBy2.setHitByTorpedo(hitByTorpedo * 0.25);
+            Battleships sittingDuck = standBy + standBy2;
+            setHitByCannon(sittingDuck.getHitByCannon());
+            setHitByTorpedo(sittingDuck.getHitByTorpedo());
+        }
+        else if(currentPilots == 0)
+        {
+            canOperate = false;
+        }
+        
+        if(health_points <= 0)
+        {
+            canOperate = false;
+        }
+    }
+
+    //Light Cannon Stats
+    weapon returnCannonWeapon(){
+        
+        return lightCannon;
+    }
+    short getHitByCannon()
     {
         return hitByCannon;
     }
 
-    int showTorpedoHitChance()
+    void setHitByCannon(short value)
+    {
+        hitByCannon = value;
+    }
+
+    //Torpedo Stats
+    weapon returnTorpedoWeapon()
+    {    
+        return torpedo;
+    }
+
+    short getHitByTorpedo()
     {
         return hitByTorpedo;
     }
 
-    void damageTaken(int damage)
+    void setHitByTorpedo(short value)
     {
-        health_points -= damage;
+        hitByTorpedo = value;
     }
 
-    int getHealthPoints()
-    {
-        return health_points;
-    }
-
+    //Battleship Stats
     string getShipName()
     {
         return shipName;
@@ -151,47 +221,20 @@ public:
         return shipType;
     }
 
-    short gethitByCannon(){
-        return hitByCannon;
+    void totalDamageTaken(short value){
+        damageTaken += value;
     }
 
-    short gethitByTorpedo(){
-        return hitByTorpedo;
+    void damageShip()
+    {
+        health_points -= damageTaken;
     }
 
-    void SethitByCannon(short value){
-
-        hitByCannon = value;
-    }
-    
-    void SethitByTorpedo(short value){
-
-        hitByTorpedo = value;
+    int getHealthPoints()
+    {
+        return health_points;
     }
 
-    void SetOperationFalse(){
-        canOperate = false;
-    }
-
-    void UpdateSubtractedHealth(short value){
-
-        subtracted_health += value;
-    }
-
-    void UpdateHealth(){
-
-        health_points -= subtracted_health;
-    }
-    
-    weapon returnCannonWeapon(){
-        
-        return lightCannon;
-    }
-
-    weapon returnTorpedoWeapon(){
-        
-        return torpedo;
-    }
 };
 
 /////////////////////////////// ALL ARE Z
