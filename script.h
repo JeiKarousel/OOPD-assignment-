@@ -12,10 +12,6 @@ using namespace std;
 int totalRounds = 5;
 string winningTeam;
 
-// vector<Battleships *> zShipTest;
-// vector<Battleships *> rShipTest;
-// vector<crewHolder *> zCrewTest;
-// vector<crewHolder *> rCrewTest;
 
 // THE GAME LOOP
 void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShip, vector<Battleships *> &rShip, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)

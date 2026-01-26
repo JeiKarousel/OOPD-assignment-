@@ -18,7 +18,6 @@ protected:
 public:
     crewHolder(string id, string name)
     {
-
         crewID = id;
         crewName = name;
     }
@@ -59,16 +58,20 @@ protected:
     int health_points;
     string shipName, shipID, shipType;
     short hitByCannon, hitByTorpedo;
+    int subtracted_health = 0;
+
     struct weapon
     {
         short amount;
         int power;
     } lightCannon, torpedo;
+    
     vector<pilot*> pilotCrew;
     vector<gunner*> gunnerCrew;
     vector<torpedohandler*> torpedoHandlerCrew;
 
 public:
+    bool canOperate = true;
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
     Battleships(int hp, string id, string name)
@@ -146,6 +149,48 @@ public:
     virtual string getShipType() const
     {
         return shipType;
+    }
+
+    short gethitByCannon(){
+        return hitByCannon;
+    }
+
+    short gethitByTorpedo(){
+        return hitByTorpedo;
+    }
+
+    void SethitByCannon(short value){
+
+        hitByCannon = value;
+    }
+    
+    void SethitByTorpedo(short value){
+
+        hitByTorpedo = value;
+    }
+
+    void SetOperationFalse(){
+        canOperate = false;
+    }
+
+    void UpdateSubtractedHealth(short value){
+
+        subtracted_health += value;
+    }
+
+    void UpdateHealth(){
+
+        health_points -= subtracted_health;
+    }
+    
+    weapon returnCannonWeapon(){
+        
+        return lightCannon;
+    }
+
+    weapon returnTorpedoWeapon(){
+        
+        return torpedo;
     }
 };
 
