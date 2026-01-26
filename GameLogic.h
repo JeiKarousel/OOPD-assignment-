@@ -198,9 +198,10 @@ void CommenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip)
         }
     }
     if(zShip.empty()){
+        
         winningTeam = "ROGOATUSKAN";
     }
     else{
-        winningTeam = 
+        winningTeam = "ZAPEZOID";
     }
 }
