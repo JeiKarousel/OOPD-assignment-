@@ -34,5 +34,5 @@ void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
     cout << "========================================" << endl;
     cout << "              FINAL RESULT              " << endl;
     cout << "========================================" << endl;
-    cout << "*** " << winningTeam << "WIN! ***" << endl;
+    cout << "*** " << winningTeam << " WIN! ***" << endl;
 }
