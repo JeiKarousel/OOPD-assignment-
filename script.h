@@ -32,6 +32,9 @@ void runScript(const int &totalRounds, const string &winningTeam, vector<Battles
     cout << "--- ZAPEZOID FLEET ---\n";
     DisplayZapezoidFleet(zShip);
 
+    cout << "\n -- ROGOATUSKAN FLEET -- \n";
+    DisplayRogoatuskanFleet(rShip);
+
     for (int round = 1; round <= totalRounds; round++)
     {
         cout << "=== " << "ROUND " << round << " ===" << "\n\n";

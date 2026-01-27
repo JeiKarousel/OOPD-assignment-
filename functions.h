@@ -284,34 +284,61 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
 
 // DISPLAY Zapezoid fleet 
 
-void DisplayZapezoidFleet(vector<Battleships*> zShip){
+void DisplayZapezoidFleet(vector<Battleships*> zShip)
+{
+    for (int i = 0; i < zShip.size(); i++){
+        cout << "[Z-S-" << setw(3) << setfill('0') << i + 1 << "] "
+             << zShip[i]->getShipName()
+             << left << setw(10) << "(" << zShip[i]->getShipType() << ")" << endl;
 
-    for( int i = 0; i< zShip.size(); i++){
-    cout << "[Z-S-" << 001 << "]"  << zShip[i]->getShipName() << left << setw(10) << "(" << zShip[i]->getShipType() << ")" << endl;
-    cout << right <<" HP: " << zShip[i]->getHealthPoints() << "/" << zShip[i]->getHealthPoints() << endl;
-    for (pilot* p : zShip[i]->getPilots()) {
-        cout << " Pilots (" << zShip[i]->currentPilots << "): " << p->getName() << endl;
+        cout << " HP: " << zShip[i]->getHealthPoints()
+             << "/" << zShip[i]->getHealthPoints() << endl;
+
+        for (pilot* p : zShip[i]->getPilots()){
+            cout << " Pilots (" << zShip[i]->currentPilots << "): "
+                 << p->getName() << endl;
+        }
+        for (gunner* g : zShip[i]->getGunners()){
+            cout << " Gunners (" << zShip[i]->currentGunners << "): "
+                 << g->getName() << endl;
+        }
+        for (torpedohandler* t : zShip[i]->getTorpedoHandlers()){
+            cout << " Torpedo Handlers (" << zShip[i]->currentTorpedoHandlers << "): "
+                 << t->getName() << endl;
+        }
+
+        cout << "--------------------------------------------------" << endl;
     }
-    for (gunner* g : zShip[i]->getGunners()) {
-        cout << " Gunners (" << zShip[i]->currentGunners << "): " << g->getName() << endl;
-    }
-    for (torpedohandler* t : zShip[i]->getTorpedoHandlers()) {
-        cout << " Torpedo Handlers (" << zShip[i]->currentTorpedoHandlers << "): " << t->getName() << endl;
-    }
-    
-    cout << "--------------------------------------------------";
-    }
-
-
-
-
 }
 
 
+// DISPLAY Rogoatuskan fleet
+void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
+{
+    for (int i = 0; i < rShip.size(); i++){
+        cout << "[R-S-" << setw(3) << setfill('0') << i + 1 << "] "
+             << rShip[i]->getShipName()
+             << left << setw(10) << "(" << rShip[i]->getShipType() << ")" << endl;
 
+        cout << " HP: " << rShip[i]->getHealthPoints()
+             << "/" << rShip[i]->getHealthPoints() << endl;
 
+        for (pilot* p : rShip[i]->getPilots()){
+            cout << " Pilots (" << rShip[i]->currentPilots << "): "
+                 << p->getName() << endl;
+        }
+        for (gunner* g : rShip[i]->getGunners()){
+            cout << " Gunners (" << rShip[i]->currentGunners << "): "
+                 << g->getName() << endl;
+        }
+        for (torpedohandler* t : rShip[i]->getTorpedoHandlers()){
+            cout << " Torpedo Handlers (" << rShip[i]->currentTorpedoHandlers << "): "
+                 << t->getName() << endl;
+        }
 
-
+        cout << "--------------------------------------------------" << endl;
+    }
+}
 
 
 #endif
