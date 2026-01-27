@@ -14,10 +14,10 @@
 
 using namespace std;
 
-bool isZapezoid = false;
-bool isRogoatuskan = false;
-bool isCrew = false;
-bool isShips = false;
+extern bool isZapezoid;
+extern bool isRogoatuskan;
+extern bool isCrew;
+extern bool isShips;
 
 string trim(const string &str)
 {
@@ -249,66 +249,94 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         }
     }
 
-    int totalPilots = availablePilots.size();
+    for(Battleships* s: ships){
 
-    for (Battleships *ship : ships)
-    {
-        if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
-        {
-            pilot *loadingCrew = availablePilots.back();
-            ship->assignPilot(loadingCrew);
+        short needed = s->requiredPilots;
+        for(int i = 0; i < needed && !availablePilots.empty(); i++){
+            s->assignPilot(availablePilots.back());
             availablePilots.pop_back();
         }
     }
 
-    bool pilotAssigned = true;
-    while (pilotAssigned && !availablePilots.empty())
-    {
-        pilotAssigned = false;
-        for (Battleships *ship : ships)
-        {
-            if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
-            {
-                pilot *loadingCrew = availablePilots.back();
-                ship->assignPilot(loadingCrew);
-                availablePilots.pop_back();
-                pilotAssigned = true;
-            }
+    for(Battleships* s: ships){
+
+        short needed = s->requiredGunners;
+        for(int i = 0; i < needed && !availableGunners.empty(); i++){
+            s->assignGunner(availableGunners.back());
+            availableGunners.pop_back();
         }
     }
 
-    bool gunnerAssigned = true;
-    while (gunnerAssigned && !availableGunners.empty())
-    {
-        gunnerAssigned = false;
-        for (Battleships *ship : ships)
-        {
-            if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
-            {
-                gunner *loadingCrew = availableGunners.back();
-                ship->assignGunner(loadingCrew);
-                availableGunners.pop_back();
-                gunnerAssigned = true;
-            }
-        }
-    }
+    for(Battleships* s: ships){
 
-    bool torpedoHandlerAssigned = true;
-    while (torpedoHandlerAssigned && !availableTorpedoHandlers.empty())
-    {
-        torpedoHandlerAssigned = false;
-        for (Battleships *ship : ships)
-        {
-            if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers)
-            {
-                torpedohandler *loadingCrew = availableTorpedoHandlers.back();
-                ship->assignTorpedoHandler(loadingCrew);
-                availableTorpedoHandlers.pop_back();
-                torpedoHandlerAssigned = true;
-            }
+        short needed = s->requiredPilots;
+        for(int i = 0; i < needed && !availableTorpedoHandlers.empty(); i++){
+            s->assignTorpedoHandler(availableTorpedoHandlers.back());
+            availableTorpedoHandlers.pop_back();
         }
     }
 }
+
+    // int totalPilots = availablePilots.size();
+
+    // for (Battleships *ship : ships)
+    // {
+    //     if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
+    //     {
+    //         pilot *loadingCrew = availablePilots.back();
+    //         ship->assignPilot(loadingCrew);
+    //         availablePilots.pop_back();
+    //     }
+    // }
+
+    // bool pilotAssigned = true;
+    // while (pilotAssigned && !availablePilots.empty())
+    // {
+    //     pilotAssigned = false;
+    //     for (Battleships *ship : ships)
+    //     {
+    //         if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
+    //         {
+    //             pilot *loadingCrew = availablePilots.back();
+    //             ship->assignPilot(loadingCrew);
+    //             availablePilots.pop_back();
+    //             pilotAssigned = true;
+    //         }
+    //     }
+    // }
+
+    // bool gunnerAssigned = true;
+    // while (gunnerAssigned && !availableGunners.empty())
+    // {
+    //     gunnerAssigned = false;
+    //     for (Battleships *ship : ships)
+    //     {
+    //         if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
+    //         {
+    //             gunner *loadingCrew = availableGunners.back();
+    //             ship->assignGunner(loadingCrew);
+    //             availableGunners.pop_back();
+    //             gunnerAssigned = true;
+    //         }
+    //     }
+    // }
+
+    // bool torpedoHandlerAssigned = true;
+    // while (torpedoHandlerAssigned && !availableTorpedoHandlers.empty())
+    // {
+    //     torpedoHandlerAssigned = false;
+    //     for (Battleships *ship : ships)
+    //     {
+    //         if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers)
+    //         {
+    //             torpedohandler *loadingCrew = availableTorpedoHandlers.back();
+    //             ship->assignTorpedoHandler(loadingCrew);
+    //             availableTorpedoHandlers.pop_back();
+    //             torpedoHandlerAssigned = true;
+    //         }
+    //     }
+    // }
+
 
 // DISPLAY Zapezoid fleet 
 void DisplayZapezoidFleet(vector<Battleships*> zShip)

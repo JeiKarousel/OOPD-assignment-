@@ -182,7 +182,7 @@ public:
     }
 
     // Light Cannon Stats
-    weapon returnCannonWeapon()
+    weapon &returnCannonWeapon()
     {
         return lightCannon;
     }
@@ -198,7 +198,7 @@ public:
     }
 
     // Torpedo Stats
-    weapon returnTorpedoWeapon()
+    weapon &returnTorpedoWeapon()
     {
         return torpedo;
     }
@@ -248,14 +248,8 @@ public:
     // Destructor
     ~Battleships()
     {
-        for (auto p : pilotCrew)
-            delete p;
         pilotCrew.clear();
-        for (auto g : gunnerCrew)
-            delete g;
         gunnerCrew.clear();
-        for (auto t : torpedoHandlerCrew)
-            delete t;
         torpedoHandlerCrew.clear();
     }
 };

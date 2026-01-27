@@ -28,6 +28,11 @@ using namespace std;
 random_device rnd;
 mt19937 gen(rnd());
 
+bool isZapezoid = false;
+bool isRogoatuskan = false;
+bool isCrew = false;
+bool isShips = false;
+
 int main(int argc, char *argv[])
 {
     // initializing the vectors and variables used
@@ -38,9 +43,12 @@ int main(int argc, char *argv[])
 
     string userInput;
 
-    cout << "Battleship time!" << endl << endl;
-    // Example input: AustraliaTT3L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
+    cout << "Battleship time!" << endl << endl; 
+    // Example input: 
+    //AustraliaTT3L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
     //AustraliaTT3L zShips2.csv zCrew2.csv rShips2.csv rCrew2.csv
+    //AustraliaTT3L zShips3.csv zCrew3.csv rShips3.csv rCrew3.csv
+
 
     // make sure there are 5 arguments
     if (argc != 5)
@@ -104,10 +112,23 @@ int main(int argc, char *argv[])
     assign_Crew_to_Ship(zCrew, zShip);
     assign_Crew_to_Ship(rCrew, rShip);
 
-    SetBool(zShip);
-    SetBool(rShip);
+    setBool(zShip);
+    setBool(rShip);
 
     // start the battle simulation
     runScript(zShip, rShip);
+
+    for(Battleships* z:  zShip ){
+        delete z;
+    }
+    for(Battleships* r:  rShip ){
+        delete r;
+    }
+      for(crewHolder* c:  zCrew){
+        delete c;
+    }
+    for(crewHolder* c:  rCrew){
+        delete c;
+    }
     return 0;
 }
