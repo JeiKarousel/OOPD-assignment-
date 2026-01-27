@@ -14,10 +14,10 @@
 
 using namespace std;
 
-bool isZapezoid = false;
-bool isRogoatuskan = false;
-bool isCrew = false;
-bool isShips = false;
+extern bool isZapezoid;
+extern bool isRogoatuskan;
+extern bool isCrew;
+extern bool isShips;
 
 string trim(const string &str)
 {
@@ -249,14 +249,11 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         }
     }
 
-    int totalPilots = availablePilots.size();
+    for(Battleships* s: ships){
 
-    for (Battleships *ship : ships)
-    {
-        if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
-        {
-            pilot *loadingCrew = availablePilots.back();
-            ship->assignPilot(loadingCrew);
+        short needed = s->requiredPilots;
+        for(int i = 0; i < needed && !availablePilots.empty(); i++){
+            s->assignPilot(availablePilots.back());
             availablePilots.pop_back();
         }
     }

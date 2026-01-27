@@ -21,7 +21,7 @@ int roll(int min, int max)
 }
 
 // function to set bool
-void SetBool(vector<Battleships *> &ShipVector)
+void setBool(vector<Battleships *> &ShipVector)
 {
     for (Battleships *s : ShipVector)
     {
@@ -60,18 +60,22 @@ bool Roll_Hit_Miss(Battleships *Target, string weapon)
 
 Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
 {
-    vector<Battleships *> validTargets;
+    vector<Battleships *> validTarget;
     // roll a random ship
     for (Battleships *e : enemyShip)
     {
         if (e->canOperate)
         {
-            validTargets.push_back(e);
+            validTarget.push_back(e);
         }
     }
+    // preventing roll(0,-1)
+    if(validTarget.empty()){
+        return nullptr;
+    }
     // get index of random enemy ship
-    int index = roll(0, (validTargets.size() - 1));
-    return validTargets[index];
+    int index = roll(0, (validTarget.size() - 1));
+    return validTarget[index];
 }
 
 void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleships *> &enemyShip, string weapon)
@@ -100,7 +104,7 @@ void fleetReport(vector<Battleships *> &ships, string teamName, string idPrefix)
    
     cout << teamName << ":"<< endl;
     for (size_t i = 0; i < ships.size(); i++) {
-        cout << " [" << idPrefix << setw(3) << i << setfill('0') << (i + 1) << "] ";
+        cout << " [" << idPrefix << setw(3) << setfill('0') << (i + 1) << "] ";
 
         cout << ships[i]->getShipType() << " " << ships[i]->getShipName() << " ";
 

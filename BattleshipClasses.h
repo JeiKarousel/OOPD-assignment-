@@ -195,8 +195,7 @@ public:
     }
 
     // Light Cannon Stats
-    // Wan Wei Siang
-    weapon returnCannonWeapon()
+    weapon &returnCannonWeapon()
     {
         return lightCannon;
     }
@@ -214,8 +213,7 @@ public:
     }
 
     // Torpedo Stats
-    // Wan Wei Siang
-    weapon returnTorpedoWeapon()
+    weapon &returnTorpedoWeapon()
     {
         return torpedo;
     }
@@ -274,14 +272,8 @@ public:
     // Wan Wei Siang
     ~Battleships()
     {
-        for (auto p : pilotCrew)
-            delete p;
         pilotCrew.clear();
-        for (auto g : gunnerCrew)
-            delete g;
         gunnerCrew.clear();
-        for (auto t : torpedoHandlerCrew)
-            delete t;
         torpedoHandlerCrew.clear();
     }
 };
