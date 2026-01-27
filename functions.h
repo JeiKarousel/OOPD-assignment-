@@ -267,45 +267,28 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         pilotAssigned = false;
         for (Battleships *ship : ships)
         {
-            if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
+            while (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
             {
                 pilot *loadingCrew = availablePilots.back();
                 ship->assignPilot(loadingCrew);
                 availablePilots.pop_back();
                 pilotAssigned = true;
             }
-        }
-    }
 
-    bool gunnerAssigned = true;
-    while (gunnerAssigned && !availableGunners.empty())
-    {
-        gunnerAssigned = false;
-        for (Battleships *ship : ships)
-        {
-            if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
+            while (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
             {
                 gunner *loadingCrew = availableGunners.back();
                 ship->assignGunner(loadingCrew);
                 availableGunners.pop_back();
-                gunnerAssigned = true;
             }
-        }
-    }
-
-    bool torpedoHandlerAssigned = true;
-    while (torpedoHandlerAssigned && !availableTorpedoHandlers.empty())
-    {
-        torpedoHandlerAssigned = false;
-        for (Battleships *ship : ships)
-        {
-            if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers)
+            
+            while (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers)
             {
                 torpedohandler *loadingCrew = availableTorpedoHandlers.back();
                 ship->assignTorpedoHandler(loadingCrew);
                 availableTorpedoHandlers.pop_back();
-                torpedoHandlerAssigned = true;
             }
+            
         }
     }
 }

@@ -46,7 +46,7 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
 
 bool Roll_Hit_Miss(Battleships *Target, string weapon)
 {
-    int value = roll(0, 199);
+    int value = roll(0, 99);
 
     if (weapon == "Cannon") {
         return (value < Target->getHitByCannon());
@@ -132,15 +132,18 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 if (z->returnCannonWeapon().ableToShoot) 
                 {
                     // For ships contains gunner
-                    for (gunner *g : z->getGunners())
-                    {
-                        fightSequence(g, z, hit, rShip, "Cannon");
+                    if(z->currentGunners >= z->requiredGunners && z->requiredGunners > 0){
+                        for (gunner *g : z->getGunners())
+                        {
+                            fightSequence(g, z, hit, rShip, "Cannon");
+                        }
                     }
 
                     // For ships without gunners
                     if (z->requiredGunners == 0 && !z->getPilots().empty())
                     {
-                        fightSequence(nullptr, z, hit, rShip, "Cannon");
+                        pilot* p = z->getPilots().front();
+                        fightSequence(p, z, hit, rShip, "Cannon");
                     }
                     hit = false; // Reset hit flag
                 }
@@ -148,9 +151,12 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 // Only fire Torpedoes if the ship has enough handlers!
                 if (z->returnTorpedoWeapon().ableToShoot)
                 {
-                    for (torpedohandler *t : z->getTorpedoHandlers())
+                    if (z->currentTorpedoHandlers >= z->requiredTorpedoHandlers)
                     {
-                        fightSequence(t, z, hit, rShip, "Torpedo");
+                        for (torpedohandler *t : z->getTorpedoHandlers())
+                        {
+                            fightSequence(t, z, hit, rShip, "Torpedo");
+                        }
                     }
                 }
             }
@@ -163,23 +169,30 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             {
                 if (r->returnCannonWeapon().ableToShoot)
                 {
-                    for (gunner *g : r->getGunners())
+                    if (r->currentGunners >= r->requiredGunners && r->requiredGunners > 0)
                     {
-                        fightSequence(g, r, hit, zShip, "Cannon");
+                        for (gunner *g : r->getGunners())
+                        {
+                            fightSequence(g, r, hit, zShip, "Cannon");
+                        }
                     }
 
                     if (r->requiredGunners == 0 && !r->getPilots().empty())
                     {
-                        fightSequence(nullptr, r, hit, zShip, "Cannon");
+                        pilot* p = r->getPilots().front();
+                        fightSequence(p, r, hit, zShip, "Cannon");
                     }
                     hit = false;
                 }
 
                 if (r->returnTorpedoWeapon().ableToShoot)
                 {
-                    for (torpedohandler *t : r->getTorpedoHandlers())
+                    if (r->currentTorpedoHandlers >= r->requiredTorpedoHandlers)
                     {
-                        fightSequence(t, r, hit, zShip, "Torpedo");
+                        for (torpedohandler *t : r->getTorpedoHandlers())
+                        {
+                            fightSequence(t, r, hit, zShip, "Torpedo");
+                        }
                     }
                 }
             }
