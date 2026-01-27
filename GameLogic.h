@@ -11,6 +11,14 @@ using namespace std;
 
 extern mt19937 gen;
 
+//roll a random number
+int roll(int min, int max)
+{
+    uniform_int_distribution<> dist(min, max);
+    int randomNum = dist(gen);
+    return randomNum;
+}
+
 // function to set bool
 void SetBool(vector<Battleships *> &ShipVector)
 {
@@ -22,7 +30,9 @@ void SetBool(vector<Battleships *> &ShipVector)
 
 void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapon, Battleships *enemyShip, int damage)
 {
-    cout << Ship->getShipType() << Ship->getShipName() << "'s" << weapon << Crew->getName() << " fires at " << enemyShip->getShipType() << " " << enemyShip->getShipName() << "...";
+    // safety check for nullptr crew
+    string crewName = (Crew != nullptr) ? Crew->getName() : "Unknown Pilot Crew";
+    cout << Ship->getShipType() << " " << Ship->getShipName() << "'s " << weapon << " crew " << crewName << " fires at " << enemyShip->getShipType() << " " << enemyShip->getShipName() << "...";
     if (hit)
     {
         cout << "HIT! " << "(" << damage << "dmg)" << endl;
@@ -33,62 +43,33 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
     }
 }
 
-bool Roll_Hit_Miss_Cannon(Battleships *Ship)
+bool Roll_Hit_Miss(Battleships *Target, string weapon)
 {
-    uniform_int_distribution<> dist(0, 99);
-    int value = dist(gen);
+    int value = roll(0, 99);
 
-    // if falls in range then return true
-    if (value < Ship->getHitByCannon())
-    {
-        return true;
+    if (weapon == "Cannon") {
+        return (value < Target->getHitByCannon());
+    } 
+    else if (weapon == "Torpedo") {
+        return (value < Target->getHitByTorpedo());
     }
-    else
-    {
-        return false;
-    }
-}
-
-bool Roll_Hit_Miss_Torpedo(Battleships *Ship)
-{
-    uniform_int_distribution<> dist(0, 99);
-    int value = dist(gen);
-
-    // if falls in range then return true
-    if (value < Ship->getHitByTorpedo())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//roll a random number
-int roll(int min, int max)
-{
-    uniform_int_distribution<> dist(min, max);
-    int randomNum = dist(gen);
-    return randomNum;
+    return false;
 }
 
 Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
 {
-    vector<Battleships *> temporary;
-    Battleships *chosenShip;
+    vector<Battleships *> validTargets;
     // roll a random ship
     for (Battleships *e : enemyShip)
     {
         if (e->canOperate)
         {
-            temporary.push_back(e);
+            validTargets.push_back(e);
         }
-        // get index of random enemy ship
-        int index = roll(0, (temporary.size() - 1));
-        chosenShip = temporary[index];
     }
-    return chosenShip;
+    // get index of random enemy ship
+    int index = roll(0, (validTargets.size() - 1));
+    return validTargets[index];
 }
 
 void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleships *> &enemyShip, string weapon)
@@ -100,43 +81,26 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
         return;
     
     // roll to see if the weapon successfully hit or missed the enemy ship
-
-    if(weapon == "Cannon")
-    {
-    hit = Roll_Hit_Miss_Cannon(s);
+    hit = Roll_Hit_Miss(targetShip, weapon);
 
     if (hit)
     {
-        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnCannonWeapon().power);
-        targetShip->totalDamageTaken(s->returnCannonWeapon().power);
+        displayHit_Miss(hit, s, crew, weapon, targetShip, (weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
+        targetShip->totalDamageTaken((weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
     }
     else
     {
-        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnCannonWeapon().power);
-    }
-    }
-
-    if(weapon == "Torpedo")
-    {
-    hit = Roll_Hit_Miss_Torpedo(s);
-
-    if (hit)
-    {
-        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnTorpedoWeapon().power);
-        targetShip->totalDamageTaken(s->returnTorpedoWeapon().power);
-    }
-    else
-    {
-        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnTorpedoWeapon().power);
-    }
+        displayHit_Miss(hit, s, crew, weapon, targetShip, (weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
     }
 }
 
 void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip, string &winningTeam)
 {
     int roundCount = 1; 
+    bool zAlive = true;
+    bool rAlive = true;
 
-    while (!zShip.empty() || !rShip.empty())
+    while (zAlive && rAlive && roundCount <= 200)
     {
         cout << ">>> " << "ROUND" << roundCount << " <<<" << endl;
         // PHASE 1
@@ -146,15 +110,30 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             bool hit = false;
             if (z->canOperate)
             {
-                for (gunner *g : z->getGunners())
+                // Only fire Cannons if the ship has enough gunners!
+                if (z->returnCannonWeapon().ableToShoot) 
                 {
-                    fightSequence(g, z, hit, rShip, "Cannon");
-                }
-                hit = false;
+                    // For ships contains gunner
+                    for (gunner *g : z->getGunners())
+                    {
+                        fightSequence(g, z, hit, rShip, "Cannon");
+                    }
 
-                for (torpedohandler *t : z->getTorpedoHandlers())
+                    // For ships without gunners
+                    if (z->requiredGunners == 0 && !z->getPilots().empty())
+                    {
+                        fightSequence(nullptr, z, hit, rShip, "Cannon");
+                    }
+                    hit = false; // Reset hit flag
+                }
+
+                // Only fire Torpedoes if the ship has enough handlers!
+                if (z->returnTorpedoWeapon().ableToShoot)
                 {
-                    fightSequence(t, z, hit, rShip, "Torpedo");
+                    for (torpedohandler *t : z->getTorpedoHandlers())
+                    {
+                        fightSequence(t, z, hit, rShip, "Torpedo");
+                    }
                 }
             }
         }
@@ -164,20 +143,31 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             bool hit = false;
             if (r->canOperate)
             {
-                for (gunner *g : r->getGunners())
+                if (r->returnCannonWeapon().ableToShoot)
                 {
-                    fightSequence(g, r, hit, zShip, "Cannon");
+                    for (gunner *g : r->getGunners())
+                    {
+                        fightSequence(g, r, hit, zShip, "Cannon");
+                    }
+
+                    if (r->requiredGunners == 0 && !r->getPilots().empty())
+                    {
+                        fightSequence(nullptr, r, hit, zShip, "Cannon");
+                    }
+                    hit = false;
                 }
 
-                hit = false;
-
-                for (torpedohandler *t : r->getTorpedoHandlers())
+                if (r->returnTorpedoWeapon().ableToShoot)
                 {
-                    fightSequence(t, r, hit, zShip, "Torpedo");
+                    for (torpedohandler *t : r->getTorpedoHandlers())
+                    {
+                        fightSequence(t, r, hit, zShip, "Torpedo");
+                    }
                 }
             }
         }
         // PHASE 2 -- UPDATE HEALTH POINTS AND ASSIGN SHIPS TO BE DESTROYED
+        zAlive = false;
         for (Battleships *z : zShip)
         {
             if (z->canOperate)
@@ -185,8 +175,11 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 z->damageShip();
                 z->checkOperationStatus();
             }
+            if (z->canOperate)
+                zAlive = true;
         }
         
+        rAlive = false;
         for (Battleships *r : rShip)
         {
             if (r->canOperate)
@@ -194,17 +187,22 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 r->damageShip();
                 r->checkOperationStatus();
             }
+            if (r->canOperate)
+                rAlive = true;
         }
 
         cout << "--- Round Status Report ---" << endl;
         // counter to see how many rounds
         roundCount++;
     }
-    if(zShip.empty()){
+    if (!zAlive && !rAlive) {
+        winningTeam = "DRAW (BOTH FLEETS DESTROYED)";
+    } else if (!zAlive) {
         winningTeam = "ROGOATUSKANS";
-    }
-    else{
+    } else if (!rAlive) {
         winningTeam = "ZAPEZOIDS";
+    } else {
+        winningTeam = "DRAW (AFTER TIMEOUT)";
     }
 }
 

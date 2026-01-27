@@ -82,6 +82,9 @@ public:
         health_points = 100;
         shipID = "8008";
         shipName = "Argos";
+
+        lightCannon.ableToShoot = true;
+        torpedo.ableToShoot = true;
     }
 
     Battleships(int hp, string id, string name)
@@ -89,6 +92,9 @@ public:
         health_points = hp;
         shipID = id;
         shipName = name;
+
+        lightCannon.ableToShoot = true;
+        torpedo.ableToShoot = true;
     }
 
     // Operator Overloading
@@ -224,6 +230,7 @@ public:
     void damageShip()
     {
         health_points -= damageTaken;
+        damageTaken = 0;
     }
 
     int getHealthPoints()
@@ -349,6 +356,8 @@ public:
         hitByTorpedo = 30;
         lightCannon.power = 159;
         lightCannon.amount = 11;
+        torpedo.power = 282;
+        torpedo.amount = 5;
         requiredCrew(2, 11, 5);
     }
     string getShipType() const override
