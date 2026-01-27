@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cctype>
 #include "BattleshipClasses.h"
+#include "GameLogic.h"
 #include <iomanip>
 #include <random>
 
@@ -19,6 +20,7 @@ extern bool isRogoatuskan;
 extern bool isCrew;
 extern bool isShips;
 
+// MUHAMMAD YUSUF BIN RIDUAN
 string trim(const string &str)
 {
     size_t first = str.find_first_not_of(" \t\r\n");
@@ -107,6 +109,8 @@ void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
+        // MUHAMMAD YUSUF BIN RIDUAN
+        SHIP_id = trim(SHIP_id);
         SHIP_type = trim(SHIP_type);
 
         if (SHIP_type == "Guerriero")
@@ -144,6 +148,7 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
+        // MUHAMMAD YUSUF BIN RIDUAN
         SHIP_id = trim(SHIP_id);
         SHIP_name = trim(SHIP_name);
         SHIP_type = trim(SHIP_type);
@@ -196,6 +201,7 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         getline(stream2, CREW_name, ',');
         getline(stream2, CREW_type);
 
+        // MUHAMMAD YUSUF BIN RIDUAN
         CREW_id = trim(CREW_id);
         CREW_name = trim(CREW_name);
         CREW_type = trim(CREW_type);
@@ -226,7 +232,7 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
     }
 }
 
-// Function to assign crews to ships
+// Function to assign crews to ships (MUHAMMAD YUSUF BIN RIDUAN)
 void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ships)
 {
     vector<pilot *> availablePilots;
@@ -249,27 +255,13 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         }
     }
 
-    for(Battleships* s: ships){
-
-        short needed = s->requiredPilots;
-        for(int i = 0; i < needed && !availablePilots.empty(); i++){
-            s->assignPilot(availablePilots.back());
-            availablePilots.pop_back();
-        }
-    }
-
-    bool pilotAssigned = true;
-    while (pilotAssigned && !availablePilots.empty())
-    {
-        pilotAssigned = false;
-        for (Battleships *ship : ships)
+    for (Battleships *ship : ships)
         {
             while (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
             {
                 pilot *loadingCrew = availablePilots.back();
                 ship->assignPilot(loadingCrew);
                 availablePilots.pop_back();
-                pilotAssigned = true;
             }
 
             while (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
@@ -287,7 +279,6 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
             }
             
         }
-    }
 }
 
 // DISPLAY Zapezoid fleet 
@@ -317,7 +308,7 @@ void DisplayZapezoidFleet(vector<Battleships*> zShip)
     }
 }
 
-
+// Syed Zaki Husain Wafa & Muhammad Yusuf Bin Riduan
 // DISPLAY Rogoatuskan fleet
 void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
 {
@@ -346,5 +337,31 @@ void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
     }
 }
 
+string winningTeam;
+
+// THE GAME LOOP
+void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
+{
+    cout << "Loading data files...\n"
+         << "========================================\n"
+         << "    FLEET CONFIGURATION REPORT   \n"
+         << "========================================\n";
+
+    cout << "--- ZAPEZOID FLEET ---\n";
+    DisplayZapezoidFleet(zShip);
+    cout << "\n -- ROGOATUSKAN FLEET -- \n";
+    DisplayRogoatuskanFleet(rShip);
+
+    cout << "========================================" << endl;
+    cout << "     BATTLE COMMENCING     " << endl;
+    cout << "========================================" << endl;
+    
+    commenceBattle(zShip, rShip, winningTeam);
+
+    cout << "========================================" << endl;
+    cout << "              FINAL RESULT              " << endl;
+    cout << "========================================" << endl;
+    cout << "*** " << winningTeam << " WIN! ***" << endl;
+}
 
 #endif
