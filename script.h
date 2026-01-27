@@ -21,9 +21,9 @@ void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
          << "========================================\n";
 
     cout << "--- ZAPEZOID FLEET ---\n";
-    // DisplayFleet(zShip);
-    cout << "--- ROGOASTUSKAN FLEET ---\n";
-    // DisplayFleet(rShip);
+    DisplayZapezoidFleet(zShip);
+    cout << "\n -- ROGOATUSKAN FLEET -- \n";
+    DisplayRogoatuskanFleet(rShip);
 
     cout << "========================================" << endl;
     cout << "     BATTLE COMMENCING     " << endl;

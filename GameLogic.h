@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include "BattleshipClasses.h"
 #include "functions.h"
 #include <random>
@@ -45,7 +46,7 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
 
 bool Roll_Hit_Miss(Battleships *Target, string weapon)
 {
-    int value = roll(0, 99);
+    int value = roll(0, 199);
 
     if (weapon == "Cannon") {
         return (value < Target->getHitByCannon());
@@ -91,6 +92,23 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
     else
     {
         displayHit_Miss(hit, s, crew, weapon, targetShip, (weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
+    }
+}
+
+void fleetReport(vector<Battleships *> &ships, string teamName, string idPrefix) {
+   
+    cout << teamName << ":"<< endl;
+    for (size_t i = 0; i < ships.size(); i++) {
+        cout << " [" << idPrefix << setw(3) << i << setfill('0') << (i + 1) << "] ";
+
+        cout << ships[i]->getShipType() << " " << ships[i]->getShipName() << " ";
+
+        if (ships[i]->canOperate) {
+            cout << "(" << ships[i]->getHealthPoints() << "/" << ships[i]->getMaxHealth() << ")";
+        } else {
+            cout << "(DESTROYED)";
+        }
+        cout << endl;
     }
 }
 
@@ -191,9 +209,14 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 rAlive = true;
         }
 
+        cout << endl;
         cout << "--- Round Status Report ---" << endl;
+        fleetReport(zShip, "ZAPEZOID", "Z-S-");
+        fleetReport(rShip, "ROGOATUSKAN", "R-S-");
+        
         // counter to see how many rounds
         roundCount++;
+        cout << endl;
     }
     if (!zAlive && !rAlive) {
         winningTeam = "DRAW (BOTH FLEETS DESTROYED)";
