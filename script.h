@@ -5,63 +5,33 @@
 #include <vector>
 #include "BattleshipClasses.h"
 #include "functions.h"
+#include "GameLogic.h"
 
 using namespace std;
 
-// set to 5 temporarily to run the code
-int totalRounds = 5;
 string winningTeam;
 
-
 // THE GAME LOOP
-void runScript(const int &totalRounds, const string &winningTeam, vector<Battleships *> &zShip, vector<Battleships *> &rShip, vector<crewHolder *> &zCrewTest, vector<crewHolder *> &rCrewTest)
+void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
 {
-    // cout << "The intergalactic battle begins! \n"
-    //      << "Prepare your defences, ready your weapons and launch your attacks!" << endl
-    //      << endl;
-
     cout << "Loading data files...\n"
          << "========================================\n"
          << "    FLEET CONFIGURATION REPORT   \n"
          << "========================================\n";
 
     cout << "--- ZAPEZOID FLEET ---\n";
-    DisplayZapezoidFleet(zShip);
+    // DisplayFleet(zShip);
+    cout << "--- ROGOASTUSKAN FLEET ---\n";
+    // DisplayFleet(rShip);
 
-    for (int round = 1; round <= totalRounds; round++)
-    {
-        cout << "=== " << "ROUND " << round << " ===" << "\n\n";
+    cout << "========================================" << endl;
+    cout << "     BATTLE COMMENCING     " << endl;
+    cout << "========================================" << endl;
+    
+    commenceBattle(zShip, rShip, winningTeam);
 
-        // ship 2 uses (insertWEAPON)!
-        // ship 1 HIT by ship 2 ! Dmg -20
-        // or
-        // ship 2 MISSES!
-
-        // ship 1 uses (insertWEAPON)!
-        // ship 2 HIT by ship 1 ! Dmg -30
-
-        // ship x is destroyed!
-        // Z crew 1 and crew 2 dies!
-
-        // summary
-        // Ship Z Total hit points : 100
-        // Ship R Total hit points : 120
-
-        // TEST STARTS HERE
-        // vector<Battleships *> zShip;
-        // vector<Battleships *> rShip;
-        // vector<crewHolder *> zCrew;
-        // vector<crewHolder *> rCrew;
-
-        while ((!zShip.empty() || !rShip.empty()))
-        {
-        }
-
-        if (round == totalRounds)
-        {
-            cout << "=== GAME OVER ===" << "\n\n";
-
-            cout << winningTeam << "WINS!" << endl;
-        }
-    }
+    cout << "========================================" << endl;
+    cout << "              FINAL RESULT              " << endl;
+    cout << "========================================" << endl;
+    cout << "*** " << winningTeam << "WIN! ***" << endl;
 }

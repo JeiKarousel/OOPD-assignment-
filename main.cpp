@@ -22,6 +22,10 @@
 
 using namespace std;
 
+// setting the seed
+random_device rnd;
+mt19937 gen(rnd());
+
 int main(int argc, char *argv[])
 {
     // initializing the vectors and variables used
@@ -98,11 +102,13 @@ int main(int argc, char *argv[])
     assign_Crew_to_Ship(zCrew, zShip);
     assign_Crew_to_Ship(rCrew, rShip);
 
+    SetBool(zShip);
+    SetBool(rShip);
+
     SetPercentages(zShip);
     SetPercentages(rShip);
 
-
     // start the battle simulation
-    runScript(totalRounds, winningTeam, zShip, rShip, zCrew, rCrew);
+    runScript(zShip, rShip);
     return 0;
 }
