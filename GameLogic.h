@@ -44,6 +44,7 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
     }
 }
 
+// Wan Wei Siang, Elsa Zara
 bool Roll_Hit_Miss(Battleships *Target, string weapon)
 {
     int value = roll(0, 199);
@@ -123,6 +124,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         cout << ">>> " << "ROUND" << roundCount << " <<<" << endl;
         // PHASE 1
         // ZAPEZOIDS LOOP
+        // Wan Wei Siang, Elsa Zara
         for (Battleships *z : zShip)
         {
             bool hit = false;
@@ -156,6 +158,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             }
         }
         // ROGOATUSKAN LOOP
+        // Wan Wei Siang, Elsa Zara
         for (Battleships *r : rShip)
         {
             bool hit = false;

@@ -11,6 +11,7 @@
 using namespace std;
 
 /////////////////////////////////////// ALL CREWS
+//Wan Wei Siang
 class crewHolder
 {
 protected:
@@ -54,6 +55,7 @@ public:
     torpedohandler(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
 };
 
+// Wan Wei Siang
 // Base Initialisation of the Battleship format
 class Battleships
 {
@@ -77,6 +79,7 @@ public:
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
 
     // Default Constructor
+    // Wan Wei Siang
     Battleships()
     {
         health_points = 100;
@@ -87,7 +90,8 @@ public:
         lightCannon.ableToShoot = true;
         torpedo.ableToShoot = true;
     }
-
+    // Wan Wei Siang
+    // Constructor
     Battleships(int hp, string id, string name)
     {
         health_points = hp;
@@ -100,6 +104,7 @@ public:
     }
 
     // Operator Overloading
+    // Wan Wei Siang
     Battleships operator+(Battleships b)
     {
         Battleships c;
@@ -116,6 +121,7 @@ public:
         return c;
     }
 
+    // Wan Wei Siang
     // Battleship Crew
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
@@ -124,39 +130,46 @@ public:
         requiredTorpedoHandlers = torpedoHandler;
     }
 
+    // Wan Wei Siang
     void assignPilot(pilot *pilotMember)
     {
         pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
+    // Wan Wei Siang
     void assignGunner(gunner *gunnerMember)
     {
         gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
+    // Wan Wei Siang
     void assignTorpedoHandler(torpedohandler *torpedoHandlerMember)
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
     }
 
+    // Wan Wei Siang
     vector<pilot *> getPilots()
     {
         return pilotCrew;
     }
 
+    // Wan Wei Siang
     vector<gunner *> getGunners()
     {
         return gunnerCrew;
     }
 
+    // Wan Wei Siang
     vector<torpedohandler *> getTorpedoHandlers()
     {
         return torpedoHandlerCrew;
     }
 
+    // Wan Wei Siang
     void checkOperationStatus()
     {
         if ((currentPilots < requiredPilots) && (currentPilots > 1))
@@ -182,70 +195,83 @@ public:
     }
 
     // Light Cannon Stats
+    // Wan Wei Siang
     weapon returnCannonWeapon()
     {
         return lightCannon;
     }
 
+    // Wan Wei Siang
     short getHitByCannon()
     {
         return hitByCannon;
     }
 
+    // Wan Wei Siang
     void setHitByCannon(short value)
     {
         hitByCannon = value;
     }
 
     // Torpedo Stats
+    // Wan Wei Siang
     weapon returnTorpedoWeapon()
     {
         return torpedo;
     }
 
+    // Wan Wei Siang
     short getHitByTorpedo()
     {
         return hitByTorpedo;
     }
 
+    // Wan Wei Siang
     void setHitByTorpedo(short value)
     {
         hitByTorpedo = value;
     }
 
     // Battleship Stats
+    // Wan Wei Siang
     string getShipName()
     {
         return shipName;
     }
 
+    // Wan Wei Siang
     virtual string getShipType() const
     {
         return shipType;
     }
 
+    // Wan Wei Siang
     void totalDamageTaken(short value)
     {
         damageTaken += value;
     }
 
+    // Wan Wei Siang
     void damageShip()
     {
         health_points -= damageTaken;
         damageTaken = 0;
     }
 
+    // Wan Wei Siang
     int getHealthPoints()
     {
         return health_points;
     }
 
+    // Wan Wei Siang
     int getMaxHealth()
     {
         return max_health;
     }
 
     // Destructor
+    // Wan Wei Siang
     ~Battleships()
     {
         for (auto p : pilotCrew)
@@ -261,6 +287,7 @@ public:
 };
 
 /////////////////////////////// ALL ARE Z
+// Wan Wei Siang
 class Guerriero : public Battleships
 {
 
@@ -280,6 +307,7 @@ public:
     }
 };
 
+// Wan Wei Siang
 class Medio : public Battleships
 {
 
@@ -298,6 +326,8 @@ public:
         return "Medio";
     }
 };
+
+// Wan Wei Siang
 class Corazzata : public Battleships
 {
 
