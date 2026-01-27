@@ -20,31 +20,6 @@ void SetBool(vector<Battleships *> &ShipVector)
     }
 }
 
-// function to set percentages
-void SetPercentages(vector<Battleships *> &ShipVector)
-{
-    for (Battleships *s : ShipVector)
-    {
-        // if the pilots are less than the required pilots, increase both hitbyCannon and hitbyTorpedo by 25%
-        if ((s->currentPilots < s->requiredPilots) && s->currentPilots > 0)
-        {
-            short newhitCannon;
-            short newhitTorpedo;
-
-            newhitCannon = (s->getHitByCannon() * 25 / 100) + s->getHitByCannon();
-            if (newhitCannon > 100)
-                newhitCannon = 100;
-
-            newhitTorpedo = (s->getHitByTorpedo() * 25 / 100) + s->getHitByTorpedo();
-            if (newhitTorpedo > 100)
-                newhitTorpedo = 100;
-
-            s->setHitByCannon(newhitCannon);
-            s->setHitByTorpedo(newhitTorpedo);
-        }
-    }
-}
-
 void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapon, Battleships *enemyShip, int damage)
 {
     cout << Ship->getShipType() << Ship->getShipName() << "'s" << weapon << Crew->getName() << " fires at " << enemyShip->getShipType() << " " << enemyShip->getShipName() << "...";

@@ -107,9 +107,6 @@ int main(int argc, char *argv[])
     SetBool(zShip);
     SetBool(rShip);
 
-    SetPercentages(zShip);
-    SetPercentages(rShip);
-
     // start the battle simulation
     runScript(zShip, rShip);
     return 0;
