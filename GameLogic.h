@@ -6,19 +6,12 @@
 
 using namespace std;
 
-// setting the seed
-random_device rnd;
-mt19937 gen(rnd());
-
-template <typename Ship>
-
 // function to set bool
 void SetBool(vector<Battleships *> &ShipVector)
 {
     for (Battleships *s : ShipVector)
     {
-        if (s->currentPilots == 0)
-            s->SetOperationFalse();
+        s->checkOperationStatus();
     }
 }
 
@@ -33,16 +26,16 @@ void SetPercentages(vector<Battleships *> &ShipVector)
             short newhitCannon;
             short newhitTorpedo;
 
-            newhitCannon = (s->gethitByCannon() * 25 / 100) + s->gethitByCannon();
+            newhitCannon = (s->getHitByCannon() * 25 / 100) + s->getHitByCannon();
             if (newhitCannon > 100)
                 newhitCannon = 100;
 
-            newhitTorpedo = (s->gethitByTorpedo() * 25 / 100) + s->gethitByTorpedo();
+            newhitTorpedo = (s->getHitByTorpedo() * 25 / 100) + s->getHitByTorpedo();
             if (newhitTorpedo > 100)
                 newhitTorpedo = 100;
 
-            s->SethitByCannon(newhitCannon);
-            s->SethitByTorpedo(newhitTorpedo);
+            s->setHitByCannon(newhitCannon);
+            s->setHitByTorpedo(newhitTorpedo);
         }
     }
 }
@@ -66,7 +59,7 @@ bool Roll_Hit_Miss(Battleships *Ship)
     int value = dist(gen);
 
     // if falls in range then return true
-    if (value < Ship->gethitByCannon())
+    if (value < Ship->getHitByCannon())
     {
         return true;
     }
@@ -76,8 +69,7 @@ bool Roll_Hit_Miss(Battleships *Ship)
     }
 }
 
-void fight();
-
+//roll a random number
 int roll(int min, int max)
 {
     uniform_int_distribution<> dist(min, max);
@@ -106,7 +98,7 @@ Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
 void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleships *> &enemyShip, string weapon)
 {
     // choose the enemy ship
-    Battleships *EnemyShip = chooseEnemyShip(enemyShip);
+    Battleships *enemyShip = chooseEnemyShip(enemyShip);
     Battleships *v = chooseEnemyShip(enemyShip);
 
     // roll to see if the weapon successfully hit or missed the enemy ship
@@ -115,7 +107,7 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
     if (hit)
     {
         displayHit_Miss(hit, s, crew, weapon, v, s->returnCannonWeapon().power);
-        v->UpdateSubtractedHealth(s->returnCannonWeapon().power);
+        v->totalDamageTaken(s->returnCannonWeapon().power);
     }
     else
     {
@@ -123,13 +115,13 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
     }
 }
 
-void CommenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip)
+void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip, string &winningTeam)
 {
-    string winningTeam;
-    int totalRounds;
+    int roundCount = 1; 
 
-    while (zShip.empty() || rShip.empty())
+    while (!zShip.empty() || !rShip.empty())
     {
+        cout << ">>> " << "ROUND" << roundCount << " <<<" << endl;
         // PHASE 1
         // ZAPEZOIDS LOOP
         for (Battleships *z : zShip)
@@ -149,7 +141,6 @@ void CommenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip)
                 }
             }
         }
-
         // ROGOATUSKAN LOOP
         for (Battleships *r : rShip)
         {
@@ -169,18 +160,13 @@ void CommenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip)
                 }
             }
         }
-
         // PHASE 2 -- UPDATE HEALTH POINTS AND ASSIGN SHIPS TO BE DESTROYED
         for (Battleships *z : zShip)
         {
             if (z->canOperate)
             {
-                z->UpdateHealth();
-
-                if (z->getHealthPoints() <= 0)
-                {
-                    z->SetOperationFalse();
-                }
+                z->damageShip();
+                z->checkOperationStatus();
             }
         }
         
@@ -188,20 +174,19 @@ void CommenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip)
         {
             if (r->canOperate)
             {
-                r->UpdateHealth();
-
-                if (r->getHealthPoints() <= 0)
-                {
-                    r->SetOperationFalse();
-                }
+                r->damageShip();
+                r->checkOperationStatus();
             }
         }
+
+        cout << "--- Round Status Report ---" << endl;
+        // counter to see how many rounds
+        roundCount++;
     }
     if(zShip.empty()){
-        
-        winningTeam = "ROGOATUSKAN";
+        winningTeam = "ROGOATUSKANS";
     }
     else{
-        winningTeam = "ZAPEZOID";
+        winningTeam = "ZAPEZOIDS";
     }
 }
