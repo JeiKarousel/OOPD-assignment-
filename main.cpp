@@ -18,8 +18,15 @@
 #include "BattleshipClasses.h"
 #include "functions.h"
 #include "script.h"
+#include "GameLogic.h"
+#include <random>
+
 
 using namespace std;
+
+// setting the seed
+random_device rnd;
+mt19937 gen(rnd());
 
 int main(int argc, char *argv[])
 {
@@ -32,7 +39,8 @@ int main(int argc, char *argv[])
     string userInput;
 
     cout << "Battleship time!" << endl << endl;
-    // Example input: XyloTT9L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
+    // Example input: AustraliaTT3L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
+    //AustraliaTT3L zShips2.csv zCrew2.csv rShips2.csv rCrew2.csv
 
     // make sure there are 5 arguments
     if (argc != 5)
@@ -96,7 +104,10 @@ int main(int argc, char *argv[])
     assign_Crew_to_Ship(zCrew, zShip);
     assign_Crew_to_Ship(rCrew, rShip);
 
+    SetBool(zShip);
+    SetBool(rShip);
+
     // start the battle simulation
-    runScript(totalRounds, winningTeam, zShip, rShip, zCrew, rCrew);
+    runScript(zShip, rShip);
     return 0;
 }

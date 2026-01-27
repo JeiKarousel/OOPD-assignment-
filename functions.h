@@ -10,6 +10,7 @@
 #include <cctype>
 #include "BattleshipClasses.h"
 #include <iomanip>
+#include <random>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ bool isRogoatuskan = false;
 bool isCrew = false;
 bool isShips = false;
 
-string trim(const string& str)
+string trim(const string &str)
 {
     size_t first = str.find_first_not_of(" \t\r\n");
     if (first == string::npos)
@@ -41,13 +42,13 @@ bool check_File_isCSV(const string filename)
 // Checks if the file is a Zapezoid, Rogoatuskan and if it is a ship or crew
 bool check_Sides(const string filename)
 {
-
     isZapezoid = false;
     isRogoatuskan = false;
     isCrew = false;
     isShips = false;
 
-    if (filename.size() <= 4){
+    if (filename.size() <= 4)
+    {
         cout << "Invalid filename!" << filename << endl;
         return 1;
     }
@@ -82,17 +83,21 @@ bool check_Sides(const string filename)
 }
 
 // EXAMPLE FILE CONTENT:
-// 1SR, Jager, Name1
-// 2SR, Kreuzer, Name2
-// 3SR, Fregatte, Name3
+// Z-S-001,Guerriero,Name1
+// Z-S-002,Medio,Name2
+// Z-S-003,Corazzata,Name3
+
+// R-S-001,Jager,Name1
+// R-S-002,Kreuzer,Name2
+// R-S-003,Fregatte,Name3
 
 // ALL ZAPEZOID
 void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
-    // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
-    //Will fix ships later
+    // getting one line of content from the fstream eg: "Z-S-001,Guerriero,Name1" through a loop
+    // Will fix ships later
     while (getline(inFile1, content, '\n'))
     {
         stringstream stream2(content);
@@ -123,17 +128,13 @@ void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
         }
     }
 }
-// EXAMPLE FILE CONTENT:
-// 3CZ, chipi, torpedo handler
-// 4CZ, lisa, pilot
-// 5CZ, gato, gunner
 
-// ALL ROGOATUSKAN 
+// ALL ROGOATUSKAN
 void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
 
-    // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
+    // getting one line of content from the fstream eg: "R-S-001,Jager,Name1" through a loop
     while (getline(inFile1, content, '\n'))
     {
         stringstream stream2(content);
@@ -143,6 +144,8 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
+        SHIP_id = trim(SHIP_id);
+        SHIP_name = trim(SHIP_name);
         SHIP_type = trim(SHIP_type);
 
         // create an object depending on ship type
@@ -166,18 +169,26 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
     }
 }
 
+// EXAMPLE FILE CONTENT:
+// R-C-001,Allen,Pilot
+// R-C-002,json,Gunner
+// R-C-003,Imr,TorpedoHandler
+// R-C-004,Riduan,Gunner
+// R-C-005,Qi Yang,Pilot
+
 // ALL CREWS (vector determines what ship they are assigned to) (can either be r or z)
 void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
 {
     string CREW_id, CREW_name, CREW_type, content;
 
-    // getting one line of content from the fstream eg: "1SR, Jager, Name1" through a loop
-    while (getline(inFile1, content)) {
-
-        if (content.empty()) {
+    // getting one line of content from the fstream eg: "R-C-001,Allen,Pilot" through a loop
+    while (getline(inFile1, content))
+    {
+        if (content.empty())
+        {
             continue;
         }
-        
+
         stringstream stream2(content);
 
         // get id, crewtype then name
@@ -185,27 +196,30 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         getline(stream2, CREW_name, ',');
         getline(stream2, CREW_type);
 
+        CREW_id = trim(CREW_id);
+        CREW_name = trim(CREW_name);
         CREW_type = trim(CREW_type);
 
         crewHolder *c = nullptr;
 
         // create an object depending on crew type
-        if (CREW_type == "pilot")
+        if (CREW_type == "Pilot")
         {
             CrewVector.push_back(new pilot(CREW_id, CREW_name));
         }
-        else if (CREW_type == "gunner")
+        else if (CREW_type == "Gunner")
         {
             CrewVector.push_back(new gunner(CREW_id, CREW_name));
         }
-        else if (CREW_type == "torpedohandler" || CREW_type == "torpedo handler")
+        else if (CREW_type == "TorpedoHandler")
         {
             CrewVector.push_back(new torpedohandler(CREW_id, CREW_name));
         }
         else
         {
-            if (CREW_id.find("source") == string::npos) {
-                 cout << "Unknown crew type: [" << CREW_type << "] in line: " << content << endl;
+            if (CREW_id.find("source") == string::npos)
+            {
+                cout << "Unknown crew type: [" << CREW_type << "] in line: " << content << endl;
             }
             continue;
         }
@@ -213,27 +227,35 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
 }
 
 // Function to assign crews to ships
-void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ships) {
-    vector <pilot*> availablePilots;
-    vector <gunner*> availableGunners;
-    vector <torpedohandler*> availableTorpedoHandlers;
+void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ships)
+{
+    vector<pilot *> availablePilots;
+    vector<gunner *> availableGunners;
+    vector<torpedohandler *> availableTorpedoHandlers;
 
-
-    for (crewHolder* c : crew) {
-        if (pilot* p = dynamic_cast<pilot*>(c)) {
+    for (crewHolder *c : crew)
+    {
+        if (pilot *p = dynamic_cast<pilot *>(c))
+        {
             availablePilots.push_back(p);
-        } else if (gunner* g = dynamic_cast<gunner*>(c)) {
+        }
+        else if (gunner *g = dynamic_cast<gunner *>(c))
+        {
             availableGunners.push_back(g);
-        } else if (torpedohandler* t = dynamic_cast<torpedohandler*>(c)) {
+        }
+        else if (torpedohandler *t = dynamic_cast<torpedohandler *>(c))
+        {
             availableTorpedoHandlers.push_back(t);
         }
     }
 
     int totalPilots = availablePilots.size();
 
-    for (Battleships* ship : ships) {
-        if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
-            pilot* loadingCrew = availablePilots.back();
+    for (Battleships *ship : ships)
+    {
+        if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
+        {
+            pilot *loadingCrew = availablePilots.back();
             ship->assignPilot(loadingCrew);
             availablePilots.pop_back();
         }
@@ -243,9 +265,11 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
     while (pilotAssigned && !availablePilots.empty())
     {
         pilotAssigned = false;
-        for (Battleships* ship : ships) {
-            if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots) {
-                pilot* loadingCrew = availablePilots.back();
+        for (Battleships *ship : ships)
+        {
+            if (!availablePilots.empty() && ship->currentPilots < ship->requiredPilots)
+            {
+                pilot *loadingCrew = availablePilots.back();
                 ship->assignPilot(loadingCrew);
                 availablePilots.pop_back();
                 pilotAssigned = true;
@@ -257,9 +281,11 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
     while (gunnerAssigned && !availableGunners.empty())
     {
         gunnerAssigned = false;
-        for (Battleships* ship : ships) {
-            if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners) {
-                gunner* loadingCrew = availableGunners.back();
+        for (Battleships *ship : ships)
+        {
+            if (!availableGunners.empty() && ship->currentGunners < ship->requiredGunners)
+            {
+                gunner *loadingCrew = availableGunners.back();
                 ship->assignGunner(loadingCrew);
                 availableGunners.pop_back();
                 gunnerAssigned = true;
@@ -271,25 +297,26 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
     while (torpedoHandlerAssigned && !availableTorpedoHandlers.empty())
     {
         torpedoHandlerAssigned = false;
-        for (Battleships* ship : ships) {
-            if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers) {
-                torpedohandler* loadingCrew = availableTorpedoHandlers.back();
+        for (Battleships *ship : ships)
+        {
+            if (!availableTorpedoHandlers.empty() && ship->currentTorpedoHandlers < ship->requiredTorpedoHandlers)
+            {
+                torpedohandler *loadingCrew = availableTorpedoHandlers.back();
                 ship->assignTorpedoHandler(loadingCrew);
                 availableTorpedoHandlers.pop_back();
                 torpedoHandlerAssigned = true;
             }
         }
-    }  
+    }
 }
 
 // DISPLAY Zapezoid fleet 
-
 void DisplayZapezoidFleet(vector<Battleships*> zShip)
 {
     for (int i = 0; i < zShip.size(); i++){
         cout << "[Z-S-" << setw(3) << setfill('0') << i + 1 << "] "
-             << zShip[i]->getShipName()
-             << left << setw(10) << "(" << zShip[i]->getShipType() << ")" << endl;
+             << left << setw(10) << setfill(' ') << zShip[i]->getShipName()
+             << "(" << zShip[i]->getShipType() << ")" << endl;
 
         cout << " HP: " << zShip[i]->getHealthPoints()
              << "/" << zShip[i]->getHealthPoints() << endl;
@@ -306,7 +333,6 @@ void DisplayZapezoidFleet(vector<Battleships*> zShip)
             cout << " Torpedo Handlers (" << zShip[i]->currentTorpedoHandlers << "): "
                  << t->getName() << endl;
         }
-
         cout << "--------------------------------------------------" << endl;
     }
 }
@@ -317,8 +343,8 @@ void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
 {
     for (int i = 0; i < rShip.size(); i++){
         cout << "[R-S-" << setw(3) << setfill('0') << i + 1 << "] "
-             << rShip[i]->getShipName()
-             << left << setw(10) << "(" << rShip[i]->getShipType() << ")" << endl;
+             << left << setw(10) << setfill(' ') << rShip[i]->getShipName()
+             << "(" << rShip[i]->getShipType() << ")" << endl;
 
         cout << " HP: " << rShip[i]->getHealthPoints()
              << "/" << rShip[i]->getHealthPoints() << endl;

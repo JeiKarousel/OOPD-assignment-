@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <random>
 
 using namespace std;
 
@@ -18,17 +19,18 @@ protected:
 public:
     crewHolder(string id, string name)
     {
-
         crewID = id;
         crewName = name;
     }
     virtual ~crewHolder() {}
 
-    string getID() {
+    string getID()
+    {
         return crewID;
     }
 
-    string getName() {
+    string getName()
+    {
         return crewName;
     }
 };
@@ -56,28 +58,63 @@ public:
 class Battleships
 {
 protected:
-    int health_points;
+    int health_points, damageTaken;
     string shipName, shipID, shipType;
     short hitByCannon, hitByTorpedo;
     struct weapon
     {
         short amount;
         int power;
+        bool ableToShoot;
     } lightCannon, torpedo;
-    vector<pilot*> pilotCrew;
-    vector<gunner*> gunnerCrew;
-    vector<torpedohandler*> torpedoHandlerCrew;
+    vector<pilot *> pilotCrew;
+    vector<gunner *> gunnerCrew;
+    vector<torpedohandler *> torpedoHandlerCrew;
 
 public:
+    bool canOperate = true;
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
+
+    // Default Constructor
+    Battleships()
+    {
+        health_points = 100;
+        shipID = "8008";
+        shipName = "Argos";
+
+        lightCannon.ableToShoot = true;
+        torpedo.ableToShoot = true;
+    }
+
     Battleships(int hp, string id, string name)
     {
         health_points = hp;
         shipID = id;
         shipName = name;
+
+        lightCannon.ableToShoot = true;
+        torpedo.ableToShoot = true;
     }
 
+    // Operator Overloading
+    Battleships operator+(Battleships b)
+    {
+        Battleships c;
+        c.hitByCannon = this->hitByCannon + b.hitByCannon;
+        c.hitByTorpedo = this->hitByTorpedo + b.hitByTorpedo;
+        if (c.hitByCannon > 100)
+        {
+            c.hitByCannon = 100;
+        }
+        if (c.hitByTorpedo > 100)
+        {
+            c.hitByTorpedo = 100;
+        }
+        return c;
+    }
+
+    // Battleship Crew
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
@@ -85,59 +122,96 @@ public:
         requiredTorpedoHandlers = torpedoHandler;
     }
 
-    void assignPilot(pilot* pilotMember)
+    void assignPilot(pilot *pilotMember)
     {
         pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
-    void assignGunner(gunner* gunnerMember)
+    void assignGunner(gunner *gunnerMember)
     {
         gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
-    void assignTorpedoHandler(torpedohandler* torpedoHandlerMember)
+    void assignTorpedoHandler(torpedohandler *torpedoHandlerMember)
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
     }
 
-    vector<pilot*> getPilots()
+    vector<pilot *> getPilots()
     {
         return pilotCrew;
     }
 
-    vector<gunner*> getGunners()
+    vector<gunner *> getGunners()
     {
         return gunnerCrew;
     }
 
-    vector<torpedohandler*> getTorpedoHandlers()
+    vector<torpedohandler *> getTorpedoHandlers()
     {
         return torpedoHandlerCrew;
     }
 
-    int showLightCannonHitChance()
+    void checkOperationStatus()
+    {
+        if ((currentPilots < requiredPilots) && (currentPilots > 1))
+        {
+            Battleships standBy, standBy2;
+            standBy.setHitByCannon(hitByCannon);
+            standBy.setHitByTorpedo(hitByTorpedo);
+            standBy2.setHitByCannon(hitByCannon * 0.25);
+            standBy2.setHitByTorpedo(hitByTorpedo * 0.25);
+            Battleships sittingDuck = standBy + standBy2;
+            setHitByCannon(sittingDuck.getHitByCannon());
+            setHitByTorpedo(sittingDuck.getHitByTorpedo());
+        }
+        else if (currentPilots == 0)
+        {
+            canOperate = false;
+        }
+
+        if (health_points <= 0)
+        {
+            canOperate = false;
+        }
+    }
+
+    // Light Cannon Stats
+    weapon returnCannonWeapon()
+    {
+        return lightCannon;
+    }
+
+    short getHitByCannon()
     {
         return hitByCannon;
     }
 
-    int showTorpedoHitChance()
+    void setHitByCannon(short value)
+    {
+        hitByCannon = value;
+    }
+
+    // Torpedo Stats
+    weapon returnTorpedoWeapon()
+    {
+        return torpedo;
+    }
+
+    short getHitByTorpedo()
     {
         return hitByTorpedo;
     }
 
-    void damageTaken(int damage)
+    void setHitByTorpedo(short value)
     {
-        health_points -= damage;
+        hitByTorpedo = value;
     }
 
-    int getHealthPoints()
-    {
-        return health_points;
-    }
-
+    // Battleship Stats
     string getShipName()
     {
         return shipName;
@@ -146,6 +220,36 @@ public:
     virtual string getShipType() const
     {
         return shipType;
+    }
+
+    void totalDamageTaken(short value)
+    {
+        damageTaken += value;
+    }
+
+    void damageShip()
+    {
+        health_points -= damageTaken;
+        damageTaken = 0;
+    }
+
+    int getHealthPoints()
+    {
+        return health_points;
+    }
+
+    // Destructor
+    ~Battleships()
+    {
+        for (auto p : pilotCrew)
+            delete p;
+        pilotCrew.clear();
+        for (auto g : gunnerCrew)
+            delete g;
+        gunnerCrew.clear();
+        for (auto t : torpedoHandlerCrew)
+            delete t;
+        torpedoHandlerCrew.clear();
     }
 };
 
@@ -181,7 +285,7 @@ public:
         lightCannon.amount = 2;
         requiredCrew(1, 2, 0);
     }
-    
+
     string getShipType() const override
     {
         return "Medio";
@@ -252,6 +356,8 @@ public:
         hitByTorpedo = 30;
         lightCannon.power = 159;
         lightCannon.amount = 11;
+        torpedo.power = 282;
+        torpedo.amount = 5;
         requiredCrew(2, 11, 5);
     }
     string getShipType() const override
