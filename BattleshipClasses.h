@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <random>
+
 
 using namespace std;
 
@@ -77,7 +79,7 @@ public:
     Battleships()
     {
         health_points = 100;
-        shipID = 8008;
+        shipID = "8008";
         shipName = "Argos";
     }
 
