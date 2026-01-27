@@ -1,3 +1,6 @@
+#ifndef GAMELOGIC_H
+#define GAMELOGIC_H
+
 #include <iostream>
 #include <vector>
 #include "BattleshipClasses.h"
@@ -5,6 +8,8 @@
 #include <random>
 
 using namespace std;
+
+extern mt19937 gen;
 
 // function to set bool
 void SetBool(vector<Battleships *> &ShipVector)
@@ -98,20 +103,22 @@ Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
 void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleships *> &enemyShip, string weapon)
 {
     // choose the enemy ship
-    Battleships *enemyShip = chooseEnemyShip(enemyShip);
-    Battleships *v = chooseEnemyShip(enemyShip);
+    Battleships *targetShip = chooseEnemyShip(enemyShip);
 
+    if (targetShip == nullptr)
+        return;
+    
     // roll to see if the weapon successfully hit or missed the enemy ship
     hit = Roll_Hit_Miss(s);
 
     if (hit)
     {
-        displayHit_Miss(hit, s, crew, weapon, v, s->returnCannonWeapon().power);
-        v->totalDamageTaken(s->returnCannonWeapon().power);
+        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnCannonWeapon().power);
+        targetShip->totalDamageTaken(s->returnCannonWeapon().power);
     }
     else
     {
-        displayHit_Miss(hit, s, crew, weapon, v, s->returnCannonWeapon().power);
+        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnCannonWeapon().power);
     }
 }
 
@@ -149,14 +156,14 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             {
                 for (gunner *g : r->getGunners())
                 {
-                    fightSequence(g, r, hit, rShip, "Cannon");
+                    fightSequence(g, r, hit, zShip, "Cannon");
                 }
 
                 hit = false;
 
                 for (torpedohandler *t : r->getTorpedoHandlers())
                 {
-                    fightSequence(t, r, hit, rShip, "Torpedo");
+                    fightSequence(t, r, hit, zShip, "Torpedo");
                 }
             }
         }
@@ -190,3 +197,5 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         winningTeam = "ZAPEZOIDS";
     }
 }
+
+#endif
