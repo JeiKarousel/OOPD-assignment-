@@ -58,7 +58,7 @@ public:
 class Battleships
 {
 protected:
-    int health_points, damageTaken;
+    int health_points, damageTaken, max_health;
     string shipName, shipID, shipType;
     short hitByCannon, hitByTorpedo;
     struct weapon
@@ -80,6 +80,7 @@ public:
     Battleships()
     {
         health_points = 100;
+        max_health = 100;
         shipID = "8008";
         shipName = "Argos";
 
@@ -90,6 +91,7 @@ public:
     Battleships(int hp, string id, string name)
     {
         health_points = hp;
+        max_health = hp;
         shipID = id;
         shipName = name;
 
@@ -236,6 +238,11 @@ public:
     int getHealthPoints()
     {
         return health_points;
+    }
+
+    int getMaxHealth()
+    {
+        return max_health;
     }
 
     // Destructor
