@@ -151,16 +151,6 @@ public:
 
     void checkOperationStatus()
     {
-        if (currentTorpedoHandlers < requiredTorpedoHandlers)
-        {
-            torpedo.ableToShoot = false;
-        }
-
-        if (currentGunners < requiredGunners)
-        {
-            lightCannon.ableToShoot = false;
-        }
-
         if ((currentPilots < requiredPilots) && (currentPilots > 1))
         {
             Battleships standBy, standBy2;
@@ -186,9 +176,9 @@ public:
     // Light Cannon Stats
     weapon returnCannonWeapon()
     {
-
         return lightCannon;
     }
+
     short getHitByCannon()
     {
         return hitByCannon;

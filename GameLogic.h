@@ -33,13 +33,29 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
     }
 }
 
-bool Roll_Hit_Miss(Battleships *Ship)
+bool Roll_Hit_Miss_Cannon(Battleships *Ship)
 {
     uniform_int_distribution<> dist(0, 99);
     int value = dist(gen);
 
     // if falls in range then return true
     if (value < Ship->getHitByCannon())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Roll_Hit_Miss_Torpedo(Battleships *Ship)
+{
+    uniform_int_distribution<> dist(0, 99);
+    int value = dist(gen);
+
+    // if falls in range then return true
+    if (value < Ship->getHitByTorpedo())
     {
         return true;
     }
@@ -84,7 +100,10 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
         return;
     
     // roll to see if the weapon successfully hit or missed the enemy ship
-    hit = Roll_Hit_Miss(s);
+
+    if(weapon == "Cannon")
+    {
+    hit = Roll_Hit_Miss_Cannon(s);
 
     if (hit)
     {
@@ -94,6 +113,22 @@ void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleshi
     else
     {
         displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnCannonWeapon().power);
+    }
+    }
+
+    if(weapon == "Torpedo")
+    {
+    hit = Roll_Hit_Miss_Torpedo(s);
+
+    if (hit)
+    {
+        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnTorpedoWeapon().power);
+        targetShip->totalDamageTaken(s->returnTorpedoWeapon().power);
+    }
+    else
+    {
+        displayHit_Miss(hit, s, crew, weapon, targetShip, s->returnTorpedoWeapon().power);
+    }
     }
 }
 
