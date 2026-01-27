@@ -8,7 +8,6 @@
 #include <vector>
 #include <random>
 
-
 using namespace std;
 
 /////////////////////////////////////// ALL CREWS
@@ -25,11 +24,13 @@ public:
     }
     virtual ~crewHolder() {}
 
-    string getID() {
+    string getID()
+    {
         return crewID;
     }
 
-    string getName() {
+    string getName()
+    {
         return crewName;
     }
 };
@@ -66,16 +67,16 @@ protected:
         int power;
         bool ableToShoot;
     } lightCannon, torpedo;
-    vector<pilot*> pilotCrew;
-    vector<gunner*> gunnerCrew;
-    vector<torpedohandler*> torpedoHandlerCrew;
+    vector<pilot *> pilotCrew;
+    vector<gunner *> gunnerCrew;
+    vector<torpedohandler *> torpedoHandlerCrew;
 
 public:
     bool canOperate = true;
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
 
-    //Default Constructor
+    // Default Constructor
     Battleships()
     {
         health_points = 100;
@@ -90,23 +91,24 @@ public:
         shipName = name;
     }
 
-    //Operator Overloading
-    Battleships operator+(Battleships b){
+    // Operator Overloading
+    Battleships operator+(Battleships b)
+    {
         Battleships c;
         c.hitByCannon = this->hitByCannon + b.hitByCannon;
         c.hitByTorpedo = this->hitByTorpedo + b.hitByTorpedo;
-        if(c.hitByCannon > 100)
+        if (c.hitByCannon > 100)
         {
             c.hitByCannon = 100;
         }
-        if(c.hitByTorpedo > 100)
+        if (c.hitByTorpedo > 100)
         {
             c.hitByTorpedo = 100;
         }
         return c;
     }
 
-    //Battleship Crew
+    // Battleship Crew
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
@@ -114,53 +116,43 @@ public:
         requiredTorpedoHandlers = torpedoHandler;
     }
 
-    void assignPilot(pilot* pilotMember)
+    void assignPilot(pilot *pilotMember)
     {
         pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
-    void assignGunner(gunner* gunnerMember)
+    void assignGunner(gunner *gunnerMember)
     {
         gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
-    void assignTorpedoHandler(torpedohandler* torpedoHandlerMember)
+    void assignTorpedoHandler(torpedohandler *torpedoHandlerMember)
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
     }
 
-    vector<pilot*> getPilots()
+    vector<pilot *> getPilots()
     {
         return pilotCrew;
     }
 
-    vector<gunner*> getGunners()
+    vector<gunner *> getGunners()
     {
         return gunnerCrew;
     }
 
-    vector<torpedohandler*> getTorpedoHandlers()
+    vector<torpedohandler *> getTorpedoHandlers()
     {
         return torpedoHandlerCrew;
     }
 
     void checkOperationStatus()
     {
-        if(currentTorpedoHandlers < requiredTorpedoHandlers)
+        if ((currentPilots < requiredPilots) && (currentPilots > 1))
         {
-            torpedo.ableToShoot = false;
-        }
-
-        if(currentGunners < requiredGunners)
-        {
-            lightCannon.ableToShoot = false;
-        }
-
-        if(currentPilots < requiredPilots)
-        {   
             Battleships standBy, standBy2;
             standBy.setHitByCannon(hitByCannon);
             standBy.setHitByTorpedo(hitByTorpedo);
@@ -170,22 +162,23 @@ public:
             setHitByCannon(sittingDuck.getHitByCannon());
             setHitByTorpedo(sittingDuck.getHitByTorpedo());
         }
-        else if(currentPilots == 0)
+        else if (currentPilots == 0)
         {
             canOperate = false;
         }
-        
-        if(health_points <= 0)
+
+        if (health_points <= 0)
         {
             canOperate = false;
         }
     }
 
-    //Light Cannon Stats
-    weapon returnCannonWeapon(){
-        
+    // Light Cannon Stats
+    weapon returnCannonWeapon()
+    {
         return lightCannon;
     }
+
     short getHitByCannon()
     {
         return hitByCannon;
@@ -196,9 +189,9 @@ public:
         hitByCannon = value;
     }
 
-    //Torpedo Stats
+    // Torpedo Stats
     weapon returnTorpedoWeapon()
-    {    
+    {
         return torpedo;
     }
 
@@ -212,7 +205,7 @@ public:
         hitByTorpedo = value;
     }
 
-    //Battleship Stats
+    // Battleship Stats
     string getShipName()
     {
         return shipName;
@@ -223,7 +216,8 @@ public:
         return shipType;
     }
 
-    void totalDamageTaken(short value){
+    void totalDamageTaken(short value)
+    {
         damageTaken += value;
     }
 
@@ -237,6 +231,19 @@ public:
         return health_points;
     }
 
+    // Destructor
+    ~Battleships()
+    {
+        for (auto p : pilotCrew)
+            delete p;
+        pilotCrew.clear();
+        for (auto g : gunnerCrew)
+            delete g;
+        gunnerCrew.clear();
+        for (auto t : torpedoHandlerCrew)
+            delete t;
+        torpedoHandlerCrew.clear();
+    }
 };
 
 /////////////////////////////// ALL ARE Z
@@ -271,7 +278,7 @@ public:
         lightCannon.amount = 2;
         requiredCrew(1, 2, 0);
     }
-    
+
     string getShipType() const override
     {
         return "Medio";
