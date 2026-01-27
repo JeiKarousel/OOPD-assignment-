@@ -19,6 +19,8 @@
 #include "functions.h"
 #include "script.h"
 #include "GameLogic.h"
+#include <random>
+
 
 using namespace std;
 

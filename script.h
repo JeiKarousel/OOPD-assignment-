@@ -6,6 +6,7 @@
 #include "BattleshipClasses.h"
 #include "functions.h"
 #include "GameLogic.h"
+#include <random>
 
 using namespace std;
 

@@ -10,6 +10,8 @@
 #include <cctype>
 #include "BattleshipClasses.h"
 #include <iomanip>
+#include <random>
+
 
 using namespace std;
 
