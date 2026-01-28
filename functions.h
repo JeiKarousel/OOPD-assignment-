@@ -12,7 +12,6 @@
 #include "GameLogic.h"
 #include <iomanip>
 #include <random>
-
 using namespace std;
 
 extern bool isZapezoid;
@@ -208,6 +207,7 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         }
         else
         {
+            // (MUHAMMAD YUSUF BIN RIDUAN)
             if (CREW_id.find("source") == string::npos)
             {
                 cout << "Unknown crew type: [" << CREW_type << "] in line: " << content << endl;
@@ -323,7 +323,7 @@ void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
 
 string winningTeam;
 
-// To start the game loop (ELSA ZARA BINTI FAKHURRAZI)
+// To start the game loop (ELSA ZARA BINTI FAKHURRAZI) & (SYED ZAKI HUSAIN WAFA)
 void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
 {
     cout << "Loading data files...\n"

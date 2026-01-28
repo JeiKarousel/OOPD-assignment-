@@ -1,5 +1,12 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
+
+// Australia TT3L
+// Elsa Zara Binti Fakhurrazi
+// Muhammad Yusuf Bin Riduan
+// Wan Wei Siang
+// Syed Zaki Husain Wafa
+
 #include <iostream>
 #include <vector>
 #include <iomanip>
@@ -7,7 +14,6 @@
 #include "functions.h"
 #include <random>
 using namespace std;
-
 extern mt19937 gen;
 
 // Rolls a random number (ELSA ZARA BINTI FAKHURRAZI)
@@ -27,7 +33,7 @@ void setBool(vector<Battleships *> &ShipVector)
     }
 }
 
-// Displays each time a ship attacks (ELSA ZARA BINTI FAKHURRAZI)
+// Displays each time a ship attacks (ELSA ZARA BINTI FAKHURRAZI) & (MUHAMMAD YUSUF BIN RIDUAN)
 void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapon, Battleships *enemyShip, int damage)
 {
     // safety check for nullptr crew
@@ -73,7 +79,7 @@ Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
     if(validTarget.empty()){
         return nullptr;
     }
-    
+
     // Get index of random enemy ship
     int index = roll(0, (validTarget.size() - 1));
     return validTarget[index];
@@ -134,7 +140,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         cout << ">>> " << "ROUND" << roundCount << " <<<" << endl;
         // PHASE 1: attack surviving ships
         // ZAPEZOIDS LOOP
-        // (WAN WEI SIANG)
+        // (WAN WEI SIANG) & (MUHAMMAD YUSUF BIN RIDUAN)
         for (Battleships *z : zShip)
         {
             bool hit = false;
@@ -174,7 +180,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             }
         }
         // ROGOATUSKAN LOOP
-        // (WAN WEI SIANG)
+        // (WAN WEI SIANG) & (MUHAMMAD YUSUF BIN RIDUAN)
         for (Battleships *r : rShip)
         {
             bool hit = false;
@@ -210,7 +216,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 }
             }
         }
-        // PHASE 2: update health points and assign ships to be destroyed
+        // PHASE 2: update health points and assign ships to be destroyed (MUHAMMAD YUSUF BIN RIDUAN)
         zAlive = false;
         for (Battleships *z : zShip)
         {
@@ -244,6 +250,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         roundCount++;
         cout << endl;
     }
+    // (MUHAMMAD YUSUF BIN RIDUAN)
     if (!zAlive && !rAlive) {
         winningTeam = "DRAW (BOTH FLEETS DESTROYED)";
     } else if (!zAlive) {

@@ -1,13 +1,18 @@
 #ifndef BattleshipClasses_h
 #define BattleshipClasses_h
 
+// Australia TT3L
+// Elsa Zara Binti Fakhurrazi
+// Muhammad Yusuf Bin Riduan
+// Wan Wei Siang
+// Syed Zaki Husain Wafa
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <random>
-
 using namespace std;
 
 // Base Initialisation of the crews (WAN WEI SIANG)
