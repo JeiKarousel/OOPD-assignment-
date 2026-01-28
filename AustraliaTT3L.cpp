@@ -17,12 +17,12 @@
 #include <vector>
 #include "BattleshipClasses.h"
 #include "functions.h"
-#include "script.h"
 #include "GameLogic.h"
 #include <random>
+
 using namespace std;
 
-// setting the seed and general bool
+// setting the seed
 random_device rnd;
 mt19937 gen(rnd());
 
@@ -31,37 +31,39 @@ bool isRogoatuskan = false;
 bool isCrew = false;
 bool isShips = false;
 
-// main handled by: (ELSA ZARA BINTI FAKHURRAZI)
+// ELSA ZARA BINTI FAKHURRAZI
 int main(int argc, char *argv[])
 {
-    // Initializing the vectors and variables used
+    // initializing the vectors and variables used
     vector<Battleships *> zShip;
     vector<Battleships *> rShip;
     vector<crewHolder *> zCrew;
     vector<crewHolder *> rCrew;
 
     string userInput;
+
+    cout << "Battleship time!" << endl << endl; 
     // Example input: 
     //AustraliaTT3L zShips1.csv zCrew1.csv rShips1.csv rCrew1.csv
     //AustraliaTT3L zShips2.csv zCrew2.csv rShips2.csv rCrew2.csv
     //AustraliaTT3L zShips3.csv zCrew3.csv rShips3.csv rCrew3.csv
-    cout << "Battleship time!" << endl << endl; 
-    
-    // Makes sure there are 5 arguments
+
+
+    // make sure there are 5 arguments
     if (argc != 5)
     {
         cout << "Please follow the format of NameTutorialGroup file1.csv file2.csv file3.csv file4.csv " << endl;
         return 1;
     }
 
-    // Goes through every string in argv, eg: "zShips1.csv" at arg[1] and check filetype, then create object
+    // go through every string in argv, eg: "zShips1.csv" at arg[1] and check filetype, then create object
     for (int i = 1; i < argc; i++)
     {
         userInput = argv[i];
 
-        // Check whether it is a csv file
+        // check if it is a csv file
         check_File_isCSV(userInput);
-        // Check whether it is z or s, and ship or crew, then update bool
+        // check whether it is z or s, and ship or crew, then update bool
         check_Sides(userInput);
 
         ifstream inFile1;
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        // Zapezoid object creation
+        // ZAPEZOID OBJECT CREATION
         if (isZapezoid)
         {
             if (isShips)
@@ -89,7 +91,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        // Rogoatuskan object creation
+        // ROGOATUSKAN OBJECT CREATION
         if (isRogoatuskan)
         {
             if (isShips)
@@ -106,18 +108,15 @@ int main(int argc, char *argv[])
         }
     }
 
-    // Assigns every crew to each ship specific to type 
     assign_Crew_to_Ship(zCrew, zShip);
     assign_Crew_to_Ship(rCrew, rShip);
 
-    // Sets the booleans needed to run game loop
     setBool(zShip);
     setBool(rShip);
 
-    // Start the battle simulation
+    // start the battle simulation
     runScript(zShip, rShip);
 
-    // Deletes all pointers that are made in the heap
     for(Battleships* z:  zShip ){
         delete z;
     }

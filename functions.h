@@ -83,10 +83,7 @@ bool check_Sides(const string filename)
     }
     return 0;
 }
-// EXAMPLE FILE CONTENT:
-// Z-S-001,Guerriero,Name1
-// Z-S-002,Medio,Name2
-// Z-S-003,Corazzata,Name3
+// EXAMPLE FILE CONTENT: Z-S-001,Guerriero,Name1
 
 // Read ships only from zapezoids (ELSA ZARA BINTI FAKHURRAZI)
 void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
@@ -168,12 +165,6 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
         }
     }
 }
-// EXAMPLE FILE CONTENT:
-// R-C-001,Zaki,Pilot
-// R-C-002,json,Gunner
-// R-C-003,Imr,TorpedoHandler
-// R-C-004,Riduan,Gunner
-// R-C-005,Qi Yang,Pilot
 
 // Read crews (can either be r or z) (ELSA ZARA BINTI FAKHURRAZI)
 void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)

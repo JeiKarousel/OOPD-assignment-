@@ -75,7 +75,7 @@ public:
     short requiredPilots, requiredGunners, requiredTorpedoHandlers;
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
 
-    // Default Constructor (WAN WEI SIANG)
+    // Default Constructor
     Battleships()
     {
         health_points = 100;
@@ -86,7 +86,7 @@ public:
         lightCannon.ableToShoot = true;
         torpedo.ableToShoot = true;
     }
-    // Constructor (WAN WEI SIANG)
+    // Constructor
     Battleships(int hp, string id, string name)
     {
         health_points = hp;
@@ -98,7 +98,7 @@ public:
         torpedo.ableToShoot = true;
     }
 
-    // Operator Overloading (WAN WEI SIANG)
+    // Operator Overloading
     Battleships operator+(Battleships b)
     {
         Battleships c;
@@ -115,7 +115,6 @@ public:
         return c;
     }
 
-    // Battleship Crew (WAN WEI SIANG)
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
@@ -123,40 +122,34 @@ public:
         requiredTorpedoHandlers = torpedoHandler;
     }
 
-    // (WAN WEI SIANG)
     void assignPilot(pilot *pilotMember)
     {
         pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
-    // (WAN WEI SIANG)
     void assignGunner(gunner *gunnerMember)
     {
         gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
-    // (WAN WEI SIANG)
     void assignTorpedoHandler(torpedohandler *torpedoHandlerMember)
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
     }
 
-    // (WAN WEI SIANG)
     vector<pilot *> getPilots()
     {
         return pilotCrew;
     }
 
-    // (WAN WEI SIANG)
     vector<gunner *> getGunners()
     {
         return gunnerCrew;
     }
 
-    // (WAN WEI SIANG)
     vector<torpedohandler *> getTorpedoHandlers()
     {
         return torpedoHandlerCrew;
@@ -192,14 +185,12 @@ public:
     {
         return lightCannon;
     }
-
-    // (WAN WEI SIANG)
+    
     short getHitByCannon()
     {
         return hitByCannon;
     }
 
-    // (WAN WEI SIANG)
     void setHitByCannon(short value)
     {
         hitByCannon = value;
@@ -211,56 +202,49 @@ public:
         return torpedo;
     }
 
-    //( WAN WEI SIANG)
     short getHitByTorpedo()
     {
         return hitByTorpedo;
     }
 
-    // (WAN WEI SIANG)
     void setHitByTorpedo(short value)
     {
         hitByTorpedo = value;
     }
 
-    // Battleship Stats (WAN WEI SIANG)
+    // Battleship Stats
     string getShipName()
     {
         return shipName;
     }
 
-    // (WAN WEI SIANG)
     virtual string getShipType() const
     {
         return shipType;
     }
 
-    // (WAN WEI SIANG)
     void totalDamageTaken(short value)
     {
         damageTaken += value;
     }
 
-    // (WAN WEI SIANG)
     void damageShip()
     {
         health_points -= damageTaken;
         damageTaken = 0;
     }
 
-    // (WAN WEI SIANG)
     int getHealthPoints()
     {
         return health_points;
     }
 
-    // (WAN WEI SIANG)
     int getMaxHealth()
     {
         return max_health;
     }
 
-    // Destructor (WAN WEI SIANG)
+    // Destructor
     ~Battleships()
     {
         pilotCrew.clear();

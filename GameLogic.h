@@ -73,6 +73,7 @@ Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
     if(validTarget.empty()){
         return nullptr;
     }
+    
     // Get index of random enemy ship
     int index = roll(0, (validTarget.size() - 1));
     return validTarget[index];
