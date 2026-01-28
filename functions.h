@@ -12,7 +12,6 @@
 #include "GameLogic.h"
 #include <iomanip>
 #include <random>
-
 using namespace std;
 
 extern bool isZapezoid;
@@ -20,7 +19,7 @@ extern bool isRogoatuskan;
 extern bool isCrew;
 extern bool isShips;
 
-// MUHAMMAD YUSUF BIN RIDUAN
+// Ignores spaces in a string (MUHAMMAD YUSUF BIN RIDUAN)
 string trim(const string &str)
 {
     size_t first = str.find_first_not_of(" \t\r\n");
@@ -30,7 +29,7 @@ string trim(const string &str)
     return str.substr(first, (last - first + 1));
 }
 
-// Checks if the file is a CSV file
+// Checks if the file is a CSV file (ELSA ZARA BINTI FAKHURRAZI)
 bool check_File_isCSV(const string filename)
 {
     if (!(filename.substr(filename.size() - 4) == ".csv"))
@@ -41,7 +40,7 @@ bool check_File_isCSV(const string filename)
     return 0;
 }
 
-// Checks if the file is a Zapezoid, Rogoatuskan and if it is a ship or crew
+// Checks if the file is a Zapezoid/Rogoatuskan and if it is a ship/crew (ELSA ZARA BINTI FAKHURRAZI)
 bool check_Sides(const string filename)
 {
     isZapezoid = false;
@@ -83,17 +82,9 @@ bool check_Sides(const string filename)
     }
     return 0;
 }
+// EXAMPLE FILE CONTENT: Z-S-001,Guerriero,Name1
 
-// EXAMPLE FILE CONTENT:
-// Z-S-001,Guerriero,Name1
-// Z-S-002,Medio,Name2
-// Z-S-003,Corazzata,Name3
-
-// R-S-001,Jager,Name1
-// R-S-002,Kreuzer,Name2
-// R-S-003,Fregatte,Name3
-
-// ALL ZAPEZOID
+// Read ships only from zapezoids (ELSA ZARA BINTI FAKHURRAZI)
 void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
@@ -109,7 +100,7 @@ void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        // MUHAMMAD YUSUF BIN RIDUAN
+        // (MUHAMMAD YUSUF BIN RIDUAN)
         SHIP_id = trim(SHIP_id);
         SHIP_type = trim(SHIP_type);
 
@@ -133,7 +124,7 @@ void Read_zShipFromFile(ifstream &inFile1, vector<Battleships *> &zShip)
     }
 }
 
-// ALL ROGOATUSKAN
+//  Read ships only from rogoatuskan (ELSA ZARA BINTI FAKHURRAZI)
 void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
 {
     string SHIP_id, SHIP_name, SHIP_type, content;
@@ -148,7 +139,7 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
         getline(stream2, SHIP_type, ',');
         getline(stream2, SHIP_name);
 
-        // MUHAMMAD YUSUF BIN RIDUAN
+        // (MUHAMMAD YUSUF BIN RIDUAN)
         SHIP_id = trim(SHIP_id);
         SHIP_name = trim(SHIP_name);
         SHIP_type = trim(SHIP_type);
@@ -174,14 +165,7 @@ void Read_rShipFromFile(ifstream &inFile1, vector<Battleships *> &rShipTest)
     }
 }
 
-// EXAMPLE FILE CONTENT:
-// R-C-001,Allen,Pilot
-// R-C-002,json,Gunner
-// R-C-003,Imr,TorpedoHandler
-// R-C-004,Riduan,Gunner
-// R-C-005,Qi Yang,Pilot
-
-// ALL CREWS (vector determines what ship they are assigned to) (can either be r or z)
+// Read crews (can either be r or z) (ELSA ZARA BINTI FAKHURRAZI)
 void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
 {
     string CREW_id, CREW_name, CREW_type, content;
@@ -201,7 +185,7 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         getline(stream2, CREW_name, ',');
         getline(stream2, CREW_type);
 
-        // MUHAMMAD YUSUF BIN RIDUAN
+        // (MUHAMMAD YUSUF BIN RIDUAN)
         CREW_id = trim(CREW_id);
         CREW_name = trim(CREW_name);
         CREW_type = trim(CREW_type);
@@ -223,6 +207,7 @@ void Read_CrewFromFile(ifstream &inFile1, vector<crewHolder *> &CrewVector)
         }
         else
         {
+            // (MUHAMMAD YUSUF BIN RIDUAN)
             if (CREW_id.find("source") == string::npos)
             {
                 cout << "Unknown crew type: [" << CREW_type << "] in line: " << content << endl;
@@ -281,7 +266,7 @@ void assign_Crew_to_Ship(vector<crewHolder *> &crew, vector<Battleships *> &ship
         }
 }
 
-// DISPLAY Zapezoid fleet 
+// Display zapezoid fleet (SYED ZAKI HUSAIN WAFA)
 void DisplayZapezoidFleet(vector<Battleships*> zShip)
 {
     for (int i = 0; i < zShip.size(); i++){
@@ -308,8 +293,7 @@ void DisplayZapezoidFleet(vector<Battleships*> zShip)
     }
 }
 
-// Syed Zaki Husain Wafa & Muhammad Yusuf Bin Riduan
-// DISPLAY Rogoatuskan fleet
+// Display rogoatuskan fleet (SYED ZAKI HUSAIN WAFA) & (MUHAMMAD YUSUF BIN RIDUAN)
 void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
 {
     for (int i = 0; i < rShip.size(); i++){
@@ -339,7 +323,7 @@ void DisplayRogoatuskanFleet(vector<Battleships*> rShip)
 
 string winningTeam;
 
-// THE GAME LOOP
+// To start the game loop (ELSA ZARA BINTI FAKHURRAZI) & (SYED ZAKI HUSAIN WAFA)
 void runScript(vector<Battleships *> &zShip, vector<Battleships *> &rShip)
 {
     cout << "Loading data files...\n"

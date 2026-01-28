@@ -1,17 +1,21 @@
 #ifndef BattleshipClasses_h
 #define BattleshipClasses_h
 
+// Australia TT3L
+// Elsa Zara Binti Fakhurrazi
+// Muhammad Yusuf Bin Riduan
+// Wan Wei Siang
+// Syed Zaki Husain Wafa
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <random>
-
 using namespace std;
 
-/////////////////////////////////////// ALL CREWS
-//Wan Wei Siang
+// Base Initialisation of the crews (WAN WEI SIANG)
 class crewHolder
 {
 protected:
@@ -38,7 +42,6 @@ public:
 
 class pilot : public crewHolder
 {
-
 public:
     pilot(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
 };
@@ -55,8 +58,7 @@ public:
     torpedohandler(string CREW_ID, string CREW_name) : crewHolder(CREW_ID, CREW_name) {}
 };
 
-// Wan Wei Siang
-// Base Initialisation of the Battleship format
+// Base Initialisation of the Battleship format (WAN WEI SIANG)
 class Battleships
 {
 protected:
@@ -79,7 +81,6 @@ public:
     short currentPilots = 0, currentGunners = 0, currentTorpedoHandlers = 0;
 
     // Default Constructor
-    // Wan Wei Siang
     Battleships()
     {
         health_points = 100;
@@ -90,7 +91,6 @@ public:
         lightCannon.ableToShoot = true;
         torpedo.ableToShoot = true;
     }
-    // Wan Wei Siang
     // Constructor
     Battleships(int hp, string id, string name)
     {
@@ -104,7 +104,6 @@ public:
     }
 
     // Operator Overloading
-    // Wan Wei Siang
     Battleships operator+(Battleships b)
     {
         Battleships c;
@@ -121,8 +120,6 @@ public:
         return c;
     }
 
-    // Wan Wei Siang
-    // Battleship Crew
     void requiredCrew(short pilot, short gunner, short torpedoHandler)
     {
         requiredPilots = pilot;
@@ -130,46 +127,40 @@ public:
         requiredTorpedoHandlers = torpedoHandler;
     }
 
-    // Wan Wei Siang
     void assignPilot(pilot *pilotMember)
     {
         pilotCrew.push_back(pilotMember);
         currentPilots++;
     }
 
-    // Wan Wei Siang
     void assignGunner(gunner *gunnerMember)
     {
         gunnerCrew.push_back(gunnerMember);
         currentGunners++;
     }
 
-    // Wan Wei Siang
     void assignTorpedoHandler(torpedohandler *torpedoHandlerMember)
     {
         torpedoHandlerCrew.push_back(torpedoHandlerMember);
         currentTorpedoHandlers++;
     }
 
-    // Wan Wei Siang
     vector<pilot *> getPilots()
     {
         return pilotCrew;
     }
 
-    // Wan Wei Siang
     vector<gunner *> getGunners()
     {
         return gunnerCrew;
     }
 
-    // Wan Wei Siang
     vector<torpedohandler *> getTorpedoHandlers()
     {
         return torpedoHandlerCrew;
     }
 
-    // Wan Wei Siang
+    // (WAN WEI SIANG) & (ELSA ZARA BINTI FAKHURRAZI) 
     void checkOperationStatus()
     {
         if ((currentPilots < requiredPilots) && (currentPilots > 1))
@@ -194,82 +185,71 @@ public:
         }
     }
 
-    // Light Cannon Stats
+    // Light Cannon Stats (ELSA ZARA BINTI FAKHURRAZI) 
     weapon &returnCannonWeapon()
     {
         return lightCannon;
     }
-
-    // Wan Wei Siang
+    
     short getHitByCannon()
     {
         return hitByCannon;
     }
 
-    // Wan Wei Siang
     void setHitByCannon(short value)
     {
         hitByCannon = value;
     }
 
-    // Torpedo Stats
+    // Torpedo Stats (ELSA ZARA BINTI FAKHURRAZI) 
     weapon &returnTorpedoWeapon()
     {
         return torpedo;
     }
 
-    // Wan Wei Siang
     short getHitByTorpedo()
     {
         return hitByTorpedo;
     }
 
-    // Wan Wei Siang
     void setHitByTorpedo(short value)
     {
         hitByTorpedo = value;
     }
 
     // Battleship Stats
-    // Wan Wei Siang
     string getShipName()
     {
         return shipName;
     }
 
-    // Wan Wei Siang
     virtual string getShipType() const
     {
         return shipType;
     }
 
-    // Wan Wei Siang
     void totalDamageTaken(short value)
     {
         damageTaken += value;
     }
 
-    // Wan Wei Siang
     void damageShip()
     {
         health_points -= damageTaken;
         damageTaken = 0;
     }
 
-    // Wan Wei Siang
     int getHealthPoints()
     {
         return health_points;
     }
 
-    // Wan Wei Siang
     int getMaxHealth()
     {
         return max_health;
     }
 
     // Destructor
-    // Wan Wei Siang
     ~Battleships()
     {
         pilotCrew.clear();
@@ -278,11 +258,9 @@ public:
     }
 };
 
-/////////////////////////////// ALL ARE Z
-// Wan Wei Siang
+// (WAN WEI SIANG)
 class Guerriero : public Battleships
 {
-
 public:
     Guerriero(int hp, string id, string name) : Battleships(123, id, name)
     {
@@ -299,10 +277,9 @@ public:
     }
 };
 
-// Wan Wei Siang
+// (WAN WEI SIANG)
 class Medio : public Battleships
 {
-
 public:
     Medio(int hp, string id, string name) : Battleships(214, id, name)
     {
@@ -319,10 +296,9 @@ public:
     }
 };
 
-// Wan Wei Siang
+// (WAN WEI SIANG)
 class Corazzata : public Battleships
 {
-
 public:
     Corazzata(int hp, string id, string name) : Battleships(1031, id, name)
     {
@@ -341,7 +317,7 @@ public:
     }
 };
 
-/////////////////////////////////// ALL ARE R
+// (SYED ZAKI HUSAIN WAFA)
 class Jager : public Battleships
 {
 public:
@@ -359,6 +335,7 @@ public:
     }
 };
 
+// (SYED ZAKI HUSAIN WAFA)
 class Kreuzer : public Battleships
 {
 public:
@@ -376,6 +353,7 @@ public:
     }
 };
 
+// (SYED ZAKI HUSAIN WAFA)
 class Fregatte : public Battleships
 {
 public:

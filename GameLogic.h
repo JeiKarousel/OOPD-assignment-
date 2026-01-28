@@ -1,18 +1,22 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
+// Australia TT3L
+// Elsa Zara Binti Fakhurrazi
+// Muhammad Yusuf Bin Riduan
+// Wan Wei Siang
+// Syed Zaki Husain Wafa
+
 #include <iostream>
 #include <vector>
 #include <iomanip>
 #include "BattleshipClasses.h"
 #include "functions.h"
 #include <random>
-
 using namespace std;
-
 extern mt19937 gen;
 
-//roll a random number
+// Rolls a random number (ELSA ZARA BINTI FAKHURRAZI)
 int roll(int min, int max)
 {
     uniform_int_distribution<> dist(min, max);
@@ -20,7 +24,7 @@ int roll(int min, int max)
     return randomNum;
 }
 
-// function to set bool
+// Function to set bool (ELSA ZARA BINTI FAKHURRAZI)
 void setBool(vector<Battleships *> &ShipVector)
 {
     for (Battleships *s : ShipVector)
@@ -29,6 +33,7 @@ void setBool(vector<Battleships *> &ShipVector)
     }
 }
 
+// Displays each time a ship attacks (ELSA ZARA BINTI FAKHURRAZI) & (MUHAMMAD YUSUF BIN RIDUAN)
 void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapon, Battleships *enemyShip, int damage)
 {
     // safety check for nullptr crew
@@ -44,9 +49,10 @@ void displayHit_Miss(bool hit, Battleships *Ship, crewHolder *Crew, string weapo
     }
 }
 
-// Wan Wei Siang, Elsa Zara
+// Rolls to determine whether ship can successfully attack enemy ship (WAN WEI SIANG) & (ELSA ZARA BINTI FAKHURRAZI) 
 bool Roll_Hit_Miss(Battleships *Target, string weapon)
 {
+    // From values 0 to 100
     int value = roll(0, 99);
 
     if (weapon == "Cannon") {
@@ -58,10 +64,10 @@ bool Roll_Hit_Miss(Battleships *Target, string weapon)
     return false;
 }
 
+// Chooses an enemy ship to be attacked (ELSA ZARA BINTI FAKHURRAZI) 
 Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
 {
     vector<Battleships *> validTarget;
-    // roll a random ship
     for (Battleships *e : enemyShip)
     {
         if (e->canOperate)
@@ -69,37 +75,42 @@ Battleships *chooseEnemyShip(vector<Battleships *> enemyShip)
             validTarget.push_back(e);
         }
     }
-    // preventing roll(0,-1)
+    // Preventing roll(0,-1)
     if(validTarget.empty()){
         return nullptr;
     }
-    // get index of random enemy ship
+
+    // Get index of random enemy ship
     int index = roll(0, (validTarget.size() - 1));
     return validTarget[index];
 }
 
+// Sequence of logic for a ship to attack an enemy ship (ELSA ZARA BINTI FAKHURRAZI) 
 void fightSequence(crewHolder *crew, Battleships *s, bool &hit, vector<Battleships *> &enemyShip, string weapon)
 {
-    // choose the enemy ship
+    // Choose an enemy ship
     Battleships *targetShip = chooseEnemyShip(enemyShip);
 
     if (targetShip == nullptr)
         return;
     
-    // roll to see if the weapon successfully hit or missed the enemy ship
+    // Roll to see if the weapon successfully hit or missed the enemy ship
     hit = Roll_Hit_Miss(targetShip, weapon);
 
     if (hit)
     {
+        // Displays successful attack 
         displayHit_Miss(hit, s, crew, weapon, targetShip, (weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
         targetShip->totalDamageTaken((weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
     }
     else
     {
+        // Displays unsuccessful attack 
         displayHit_Miss(hit, s, crew, weapon, targetShip, (weapon == "Cannon") ? s->returnCannonWeapon().power : s->returnTorpedoWeapon().power);
     }
 }
 
+// Shows the fleet status report after every round (MUHAMMAD YUSUF BIN RIDUAN)
 void fleetReport(vector<Battleships *> &ships, string teamName, string idPrefix) {
    
     cout << teamName << ":"<< endl;
@@ -117,6 +128,7 @@ void fleetReport(vector<Battleships *> &ships, string teamName, string idPrefix)
     }
 }
 
+// Game loop function: (ELSA ZARA BINTI FAKHURRAZI) 
 void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip, string &winningTeam)
 {
     int roundCount = 1; 
@@ -126,18 +138,18 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
     while (zAlive && rAlive && roundCount <= 200)
     {
         cout << ">>> " << "ROUND" << roundCount << " <<<" << endl;
-        // PHASE 1
+        // PHASE 1: attack surviving ships
         // ZAPEZOIDS LOOP
-        // Wan Wei Siang, Elsa Zara
+        // (WAN WEI SIANG) & (MUHAMMAD YUSUF BIN RIDUAN)
         for (Battleships *z : zShip)
         {
             bool hit = false;
             if (z->canOperate)
             {
-                // Only fire Cannons if the ship has enough gunners!
+                // Only fire Cannons if the ship has enough gunners
                 if (z->returnCannonWeapon().ableToShoot) 
                 {
-                    // For ships contains gunner
+                    // For ships containing gunners
                     if(z->currentGunners >= z->requiredGunners && z->requiredGunners > 0){
                         for (gunner *g : z->getGunners())
                         {
@@ -154,7 +166,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                     hit = false; // Reset hit flag
                 }
 
-                // Only fire Torpedoes if the ship has enough handlers!
+                // Only fire Torpedoes if the ship has enough handlers
                 if (z->returnTorpedoWeapon().ableToShoot)
                 {
                     if (z->currentTorpedoHandlers >= z->requiredTorpedoHandlers)
@@ -168,7 +180,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
             }
         }
         // ROGOATUSKAN LOOP
-        // Wan Wei Siang, Elsa Zara
+        // (WAN WEI SIANG) & (MUHAMMAD YUSUF BIN RIDUAN)
         for (Battleships *r : rShip)
         {
             bool hit = false;
@@ -204,7 +216,7 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
                 }
             }
         }
-        // PHASE 2 -- UPDATE HEALTH POINTS AND ASSIGN SHIPS TO BE DESTROYED
+        // PHASE 2: update health points and assign ships to be destroyed (MUHAMMAD YUSUF BIN RIDUAN)
         zAlive = false;
         for (Battleships *z : zShip)
         {
@@ -234,10 +246,11 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         fleetReport(zShip, "ZAPEZOID", "Z-S-");
         fleetReport(rShip, "ROGOATUSKAN", "R-S-");
         
-        // counter to see how many rounds
+        // Counter to the rounds
         roundCount++;
         cout << endl;
     }
+    // (MUHAMMAD YUSUF BIN RIDUAN)
     if (!zAlive && !rAlive) {
         winningTeam = "DRAW (BOTH FLEETS DESTROYED)";
     } else if (!zAlive) {
@@ -248,5 +261,4 @@ void commenceBattle( vector<Battleships *> &zShip, vector<Battleships *> &rShip,
         winningTeam = "DRAW (AFTER TIMEOUT)";
     }
 }
-
 #endif
